@@ -226,6 +226,8 @@ var lengthOfLongestSubstring = function(s) {
   let map = {};
   let j = 0; // window begins at j, ends at i
 
+  if (s.length === 0 || s.length === 1) return s.length;
+
   for (let i = 0; i < s.length; i++) {
     if (map[s[i]] === undefined) {
       currentLongest++;
