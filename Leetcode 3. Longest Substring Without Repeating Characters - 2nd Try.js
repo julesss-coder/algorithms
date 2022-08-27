@@ -246,3 +246,9 @@ var lengthOfLongestSubstring = function(s) {
 
   return longest;
 };
+
+// Best result for several submissions of same code on LeetCode:
+// 987 / 987 test cases passed.
+// Status: Accepted
+// Runtime: 112 ms
+// Memory Usage: 48.5 MB
