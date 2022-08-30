@@ -99,6 +99,7 @@ To change order of lines -> start with numberOfX = lines
 decrement
 */
 
+// VERSION 1: Completely symmetrical (even the spaces)
 public class PyramidUpsideDown {
     public static void main(String[] args) {
         String pyramid = "";
@@ -133,3 +134,32 @@ X.X.X.X.X\n
 ..X.X.X..\n
 ....X....\n
 */
+
+// VERSION 2: Only necessary spaces
+public class PyramidUpsideDown {
+    public static void main(String[] args) {
+        String pyramid = "";
+        int lines = 4;
+        int numberOfX = lines;
+
+        for (int i = 0; i < lines; i++) {
+            pyramid += " ".repeat(2 * (lines - numberOfX));
+            pyramid += "X ".repeat((numberOfX * 2) - 1);
+            pyramid += "\n";
+            numberOfX--;
+        }
+
+        System.out.println(pyramid);
+    }
+}
+
+/*
+
+Output:
+X X X X X X X 
+  X X X X X 
+    X X X 
+      X 
+      
+ */
+
