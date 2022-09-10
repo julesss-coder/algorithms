@@ -10,9 +10,9 @@ Bestimme am Anfang eine Variable z, die die Anzahl an Zeilen ausgibt (im Bild: 4
 Ausgabe in der Konsole:
 
                 X
-             X X X
-          X X X X X
-       X X X X X X X
+              X X X
+            X X X X X
+          X X X X X X X
 ---
 OBSERVATIONS
 -
@@ -62,11 +62,6 @@ for each line in lines:
 
 Log pyramid to console
 
-
-====
-Additional task:
-Reversed pyramid
-
  */
 
 public class Pyramid {
@@ -91,3 +86,80 @@ public class Pyramid {
         System.out.println(pyramid);
     }
 }
+
+//============
+/*
+
+Variation: Upside down pyramid
+
+**Observations:**
+Lines stay the same
+numberOfX changes
+To change order of lines -> start with numberOfX = lines
+decrement
+*/
+
+// VERSION 1: Completely symmetrical (even the spaces)
+public class PyramidUpsideDown {
+    public static void main(String[] args) {
+        String pyramid = "";
+        int lines = 4;
+        int numberOfX = lines;
+
+        for (int i = 0; i < lines; i++) {
+            pyramid += " ".repeat(2 * (lines - numberOfX));
+            if (numberOfX == 1) {
+                pyramid += "X";
+            } else {
+                pyramid += "X ".repeat((numberOfX * 2) - 2);
+                pyramid += "X";
+            }
+            pyramid += " ".repeat(2 * (lines - numberOfX));
+            pyramid += "\n";
+            numberOfX--;
+        }
+
+        System.out.println(pyramid);
+    }
+}
+
+/*===
+
+TRACE
+
+lines = 3
+numberOfX = 0
+
+X.X.X.X.X\n
+..X.X.X..\n
+....X....\n
+*/
+
+// VERSION 2: Only necessary spaces
+public class PyramidUpsideDown {
+    public static void main(String[] args) {
+        String pyramid = "";
+        int lines = 4;
+        int numberOfX = lines;
+
+        for (int i = 0; i < lines; i++) {
+            pyramid += " ".repeat(2 * (lines - numberOfX));
+            pyramid += "X ".repeat((numberOfX * 2) - 1);
+            pyramid += "\n";
+            numberOfX--;
+        }
+
+        System.out.println(pyramid);
+    }
+}
+
+/*
+
+Output:
+X X X X X X X 
+  X X X X X 
+    X X X 
+      X 
+      
+ */
+
