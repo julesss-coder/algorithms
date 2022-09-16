@@ -1,42 +1,94 @@
    public class CeasarsCipher {
-    public static void main(String[] args) {
-        String string = "Hal%lOzZ";
-        String encryptedString = "";
-        int cipher = 3;
+       public static void main(String[] args) {
+           String string = "Kdo%oRcC"; // "Hal%lOzZ"; // "Hal%lOzZ";
+           int cipher = 3;
+           // to encrypt:
+           // Wie rufe ich eine Funktion auf?
+           // System.out.println(convert("hello", 3));
+           // call convert
+           // to decrypt:
+           // change sign of cipher
+           // call convert
 
-        for (int i = 0; i < string.length(); i++) {
-            int remainingChars = 0;
-            int newASCIIIndex = 0;
-            int currentASCIIIndex = string.charAt(i);
-            if (currentASCIIIndex >= 65 && currentASCIIIndex <= 90) {
-                remainingChars = 90 - currentASCIIIndex;
-                if (remainingChars < cipher) {
-                    newASCIIIndex = 65 + (cipher - remainingChars - 1);
-                } else {
-                    newASCIIIndex = currentASCIIIndex + cipher;
-                }
+       }
 
-                encryptedString += Character.toString(newASCIIIndex);
-            } else if (currentASCIIIndex >= 97 && currentASCIIIndex <= 122) {
-                remainingChars = 122 - currentASCIIIndex;
-                if (remainingChars < cipher) {
-                    newASCIIIndex = 97 + (cipher - remainingChars - 1);
-                } else {
-                    newASCIIIndex = currentASCIIIndex + cipher;
-                }
 
-                encryptedString += Character.toString(newASCIIIndex);
-            } else {
-                encryptedString += string.charAt(i);
-            }
-//            System.out.println("newChar: " + Character.toString(newASCIIIndex));
-//            System.out.println("new index: " + newASCIIIndex);
-//            encryptedString += Character.toString(newASCIIIndex);
-        }
-        System.out.println(encryptedString);
-    }
+   public static void convert(String string, int cipher) {
+       String encryptedString = "";
+       if (cipher > 0) {
+           for (int i = 0; i < string.length(); i++) {
+               int remainingChars = 0;
+               int newASCIIIndex = 0;
+               int currentASCIIIndex = string.charAt(i);
+               if (currentASCIIIndex >= 65 && currentASCIIIndex <= 90) {
+                   remainingChars = 90 - currentASCIIIndex;
+                   if (remainingChars < cipher) {
+                       newASCIIIndex = 65 + (cipher - remainingChars - 1);
+                   } else {
+                       newASCIIIndex = currentASCIIIndex + cipher;
+                   }
+
+                   encryptedString += Character.toString(newASCIIIndex);
+               } else if (currentASCIIIndex >= 97 && currentASCIIIndex <= 122) {
+                   remainingChars = 122 - currentASCIIIndex;
+                   if (remainingChars < cipher) {
+                       newASCIIIndex = 97 + (cipher - remainingChars - 1);
+                   } else {
+                       newASCIIIndex = currentASCIIIndex + cipher;
+                   }
+
+                   encryptedString += Character.toString(newASCIIIndex);
+               } else {
+                   encryptedString += string.charAt(i);
+               }
+           }
+
+           System.out.println(encryptedString);
+
+       } else if (cipher < 0) {
+           for (int i = 0; i < string.length(); i++) {
+               int remainingChars = 0;
+               int newASCIIIndex = 0;
+               int currentASCIIIndex = string.charAt(i);
+               if (currentASCIIIndex >= 65 && currentASCIIIndex <= 90) {
+                   remainingChars = currentASCIIIndex - 65;
+                   // turn cipher to positive number
+                   if (remainingChars < Math.abs(cipher)) {
+                       // turn cipher to positive number
+                       newASCIIIndex = 90 - (Math.abs(cipher) - remainingChars - 1);
+                   } else {
+                       newASCIIIndex = currentASCIIIndex + cipher;
+                   }
+
+                   encryptedString += Character.toString(newASCIIIndex);
+               } else if (currentASCIIIndex >= 97 && currentASCIIIndex <= 122) {
+                   remainingChars = currentASCIIIndex - 97;
+                   if (remainingChars < Math.abs(cipher)) {
+                       newASCIIIndex = 122 - (Math.abs(cipher) - remainingChars - 1);
+                   } else {
+                       newASCIIIndex = currentASCIIIndex + cipher;
+                   }
+
+                   encryptedString += Character.toString(newASCIIIndex);
+               } else {
+                   encryptedString += string.charAt(i);
+               }
+           }
+           System.out.println(encryptedString);
+       } else {
+           System.out.println("No encryption: " + string);
+       }
+   }
+    // Encrypt the password
+
 }
 
+    // Decrypt the encrypted string
+    // change sign of cipher and run this function
+
+// using ASCII instead of creating own chars array:
+   // pros:
+   // + not using up extra memory
 
  /* VERSION 1
         String string = "Hall%oz";
