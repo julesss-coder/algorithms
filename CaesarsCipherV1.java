@@ -1,51 +1,93 @@
-   public class CeasarsCipher {
-       public static void main(String[] args) {
-           String string = "Kdo%oRcC"; // "Hal%lOzZ"; // "Hal%lOzZ";
-           int cipher = 3;
-           // to encrypt:
-           // Wie rufe ich eine Funktion auf?
-           // System.out.println(convert("hello", 3));
-           // call convert
-           // to decrypt:
-           // change sign of cipher
-           // call convert
+import java.io.File;
+import java.io.FileWriter;
+import java.util.Scanner;
 
+public class CaesarsCipherV2 {
+       public static void main(String[] args) {
+           /*File source = new File("source.txt");
+           FileWriter fileWriter = new FileWriter(source, true);*/
+           String string = "Hal%lOzZ";
+           Scanner scanner = new Scanner(System.in);
+           System.out.println("Enter an integer that is not 0.");
+           int cipher = scanner.nextInt();
+           System.out.println("Your string will be encrypted with cipher " + cipher);
+
+           while (cipher == 0) {
+               System.out.println("Please choose an integer that is not 0.");
+           }
+
+           String encrypted = "";
+           // encrypt string:
+           if (cipher > 0) {
+               encrypted = convertWithPositiveCipher(string, cipher);
+               System.out.println("Encrypted string: " + encrypted);
+           } else if (cipher < 0) {
+               // decrypt string:
+               // change algebraic sign of cipher
+               encrypted = convertWithNegativeCipher(string, cipher);
+               System.out.println("Encrypted string: " + encrypted);
+           }
+
+           // decrypt string:
+           String decrypted = "";
+           // Change algebraic sign of cipher:
+           cipher *= -1;
+           if (cipher > 0) {
+               decrypted = convertWithPositiveCipher(encrypted, cipher);
+               System.out.println("Decrypted string: " + decrypted);
+           } else if (cipher < 0) {
+               decrypted = convertWithNegativeCipher(encrypted, cipher);
+               System.out.println("Decrypted string: " + decrypted);
+           }
        }
 
-
-   public static void convert(String string, int cipher) {
-       String encryptedString = "";
-       if (cipher > 0) {
+       static String convertWithPositiveCipher(String string, int cipher) {
+           String encryptedString = "";
            for (int i = 0; i < string.length(); i++) {
                int remainingChars = 0;
                int newASCIIIndex = 0;
                int currentASCIIIndex = string.charAt(i);
+               // If current character is upper case letter:
                if (currentASCIIIndex >= 65 && currentASCIIIndex <= 90) {
+                   // Characters remaining between current char and end of letter range
                    remainingChars = 90 - currentASCIIIndex;
+                   System.out.println("remaining characters: " + remainingChars);
+                   // If moving `cipher` letters to the right would go beyond current letter range:
                    if (remainingChars < cipher) {
+                       // Start counting again from beginning of letter range to get to encrypted character:
                        newASCIIIndex = 65 + (cipher - remainingChars - 1);
                    } else {
+                       // Just add cipher to current letter index
                        newASCIIIndex = currentASCIIIndex + cipher;
                    }
-
-                   encryptedString += Character.toString(newASCIIIndex);
+                    /*StringBuilder text = new StringBuilder();
+                   text.append("a");*/
+                   encryptedString += Character.toString(newASCIIIndex); // StringBuilder
+               // If current char is lower case letter:
                } else if (currentASCIIIndex >= 97 && currentASCIIIndex <= 122) {
+                   // Get number of characters from end of letter range:
                    remainingChars = 122 - currentASCIIIndex;
+                   // If we need to move further to the right than letter range:
                    if (remainingChars < cipher) {
+                       // continue counting from first letter of current letter range:
                        newASCIIIndex = 97 + (cipher - remainingChars - 1);
                    } else {
+                       // Just move `cipher` characters to the right from current letter:
                        newASCIIIndex = currentASCIIIndex + cipher;
                    }
 
                    encryptedString += Character.toString(newASCIIIndex);
+               // If current character is not a letter, do not encrypt, just add it to encryptedString:
                } else {
                    encryptedString += string.charAt(i);
                }
            }
 
-           System.out.println(encryptedString);
+           return encryptedString;
+       }
 
-       } else if (cipher < 0) {
+       static String convertWithNegativeCipher(String string, int cipher) {
+           String encryptedString = "";
            for (int i = 0; i < string.length(); i++) {
                int remainingChars = 0;
                int newASCIIIndex = 0;
@@ -74,17 +116,10 @@
                    encryptedString += string.charAt(i);
                }
            }
-           System.out.println(encryptedString);
-       } else {
-           System.out.println("No encryption: " + string);
+
+            return encryptedString;
        }
-   }
-    // Encrypt the password
-
 }
-
-    // Decrypt the encrypted string
-    // change sign of cipher and run this function
 
 // using ASCII instead of creating own chars array:
    // pros:
