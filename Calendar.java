@@ -1,4 +1,3 @@
-import java.sql.SQLOutput;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Scanner;
@@ -7,7 +6,7 @@ public class Calendar {
     public static void main(String[] args) {
         // Get date from user
         Scanner getDate = new Scanner(System.in);
-        System.out.println("Please provide a starting date for your calender. Format DD-MM-YYYY");
+        System.out.println("A) Please provide a starting date for your calender. Format DD-MM-YYYY.\nB) Press 0 if you wish to cancel.");
         // How can I tell the format is not correct? Regex?
         // How do I tell if numbers are correct? It's too late to check them once we check for the month's length
         // Option: Let user enter day, month and year separately
@@ -53,7 +52,7 @@ public class Calendar {
     // Create calender
     // Why do the parameters have to have the same name as the arguments?? The variable names cannot be identified otherwise.
     static String createCalendar(int startDay, int startMonth, int startYear, int monthLength) {
-        // get day of the week of given `startDay`:
+        // Find out what weekday the given start date is (name and number from 1 to 7):
         LocalDate date = LocalDate.of(startYear, startMonth, startDay);
         // How to get number instead of String?
         DayOfWeek dayOfWeek = date.getDayOfWeek();
@@ -63,9 +62,11 @@ public class Calendar {
 //        String weekDay = date.getDayOfWeek().toString().substring(0, 3);
 //        weekDay = weekDay.charAt(0) + weekDay.substring(1).toLowerCase();
         System.out.println("day of week name: " + dayOfWeekName);
+        System.out.println("day of week value: " + dayOfWeekValue);
 
         String calendar = "";
-        // Days row:
+        calendar += startMonth + " " + startYear + "\n";
+        // Add days row:
         String[] weekDays = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         int i = 0;
         while (i < weekDays.length) {
@@ -74,34 +75,64 @@ public class Calendar {
         }
         calendar += "\n";
 
+        // If starting date is not a Monday, add empty spaces to calendar:
+        for (int j = 1; j < dayOfWeekValue; j++) {
+            calendar += "     ";
+        }
 
-        // Print days in calendar:
+        // Add all days of the month, with 7 columns per week:
+        int j = dayOfWeekValue;
+        while (j <= 7 && startDay <= monthLength) {
+            if (j == 7) {
+                calendar += startDay + "\n";
+                j = 0;
+            } else {
+                // Formatting: add 4 spaces after 1-digit-dates and 3 spaces after 2-digit-dates:
+                if (startDay < 10) {
+                    calendar += startDay + "    ";
+                } else {
+                    calendar += startDay + "   ";
+                }
+            }
+            j++;
+            startDay++; // increment startDay to get to next date of month
+        }
+
+//        while (dayOfWeekValue >= startDay && dayOfWeekValue <= 7) {
+//            calendar += "" + dayOfWeekValue;
+//            if (startDay % 7 == 0) {
+//                calendar += "\n";
+//            }
+//            startDay++;
+//        }
+
+                // Print days in calendar:
         // Get day of week as number `weekDayNum` from 1 to 7: int dayOfWeekValue; String dayOfWeekName
         // first row:
         // print weekDayNum - 1 empty spaces
-        for (int j = 0; j < (dayOfWeekValue - 1); j++) {
-            calendar += "  ";
-            // days from starting day are missing
-        }
+//        for (int j = 0; j < (dayOfWeekValue - 1); j++) {
+//            calendar += "  ";
+//            // days from starting day are missing
+//        }
 
         // 7 - (weekDayNum + 1) times:
             // print date (number), starting from startDay
             // print \n
-        for (int j = startDay; j < (7 - dayOfWeekValue + 1); j++) {
-            calendar += "" + startDay + "  ";
-        }
-        calendar += "\n";
+//        for (int j = startDay; j < (7 - dayOfWeekValue + 1); j++) {
+//            calendar += "" + startDay + "  ";
+//        }
+//        calendar += "\n";
         // following rows:
         //
         // first row, starting
-        for (int k = 1; k <= monthLength; k++) {
-            // Add line break after 7 days
-            if (k % 7 == 0) {
-                calendar += k + "\n";
-            } else {
-                calendar += k + "   ";
-            }
-        }
+//        for (int k = 1; k <= monthLength; k++) {
+//            // Add line break after 7 days
+//            if (k % 7 == 0) {
+//                calendar += k + "\n";
+//            } else {
+//                calendar += k + "   ";
+//            }
+//        }
 
         return calendar;
     }
