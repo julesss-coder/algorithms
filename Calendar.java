@@ -1,5 +1,8 @@
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.Scanner;
 
 public class Calendar {
@@ -11,6 +14,17 @@ public class Calendar {
         // How do I tell if numbers are correct? It's too late to check them once we check for the month's length
         // Option: Let user enter day, month and year separately
         String startingDate = getDate.next();
+        // convert startingDate to Date format
+        // Check immediately if date exists using SimpleDateFormat, see TestProject.java
+        while (checkDate(startingDate) == false) {
+            System.out.println("The date you entered is invalid.\nA) Please provide a starting date for your calender. Format DD-MM-YYYY.\nB) Press 0 if you wish to cancel.");
+            startingDate = getDate.next();
+            checkDate(startingDate);
+        }
+
+        System.out.println(checkDate(startingDate));
+
+        // call checkDate function
         System.out.println(startingDate);
         int startDay = Integer.parseInt(startingDate.substring(0, 2));
         int startMonth = Integer.parseInt(startingDate.substring(3, 5));
@@ -47,6 +61,19 @@ public class Calendar {
 
         String calendar = createCalendar(startDay, startMonth, startYear, monthLength);
         System.out.println(calendar);
+    }
+
+    // Check if date is valid
+    static boolean checkDate(String dateString) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Date date = null;
+        sdf.setLenient(false);
+        try {
+            date = sdf.parse(dateString);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 
     // Create calender
