@@ -10,12 +10,9 @@ public class Calendar {
         // Get date from user
         Scanner getDate = new Scanner(System.in);
         System.out.println("A) Please provide a starting date for your calender. Format DD-MM-YYYY.\nB) Press 0 if you wish to cancel.");
-        // How can I tell the format is not correct? Regex?
-        // How do I tell if numbers are correct? It's too late to check them once we check for the month's length
-        // Option: Let user enter day, month and year separately
         String startingDate = getDate.next();
         // convert startingDate to Date format
-        // Check immediately if date exists using SimpleDateFormat, see TestProject.java
+        // Check immediately if date exists
         while (checkDate(startingDate) == false) {
             System.out.println("The date you entered is invalid.\nA) Please provide a starting date for your calender. Format DD-MM-YYYY.\nB) Press 0 if you wish to cancel.");
             startingDate = getDate.next();
@@ -24,8 +21,6 @@ public class Calendar {
 
         System.out.println(checkDate(startingDate));
 
-        // call checkDate function
-        System.out.println(startingDate);
         int startDay = Integer.parseInt(startingDate.substring(0, 2));
         int startMonth = Integer.parseInt(startingDate.substring(3, 5));
         int startYear = Integer.parseInt(startingDate.substring(6));
