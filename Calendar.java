@@ -1,5 +1,3 @@
-import org.w3c.dom.ls.LSOutput;
-
 import java.util.Random;
 import java.util.Scanner;
 
@@ -33,7 +31,6 @@ public class GuessNumber {
         // Create random number within given range
         Random random = new Random();
         int randomNum = random.nextInt(rangeStart, rangeEnd + 1);
-        System.out.println("random number: " + randomNum);
         int numGuess;
         int anotherRound = 0;
 
