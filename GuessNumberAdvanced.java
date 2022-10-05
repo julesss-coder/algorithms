@@ -215,10 +215,6 @@ public class GuessNumberAdvanced {
             }
         }
 
-        if (numberGuessed == true) {
-
-        }
-
         // Is there a shorter version of this?
         int anotherRound;
         do {
