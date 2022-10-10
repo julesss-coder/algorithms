@@ -1,23 +1,31 @@
 /*
 * TODOS
-* - [ ] rename variables
-* - [ ] create methods
+* - [x] rename variables
+* - [x] create methods
 * changing an array or object in a method changes it globally, as it is passed by reference
 * This does not apply to primitive values
-* - [ ] Add "game over" when a user exceeds 9 guesses
+* - [x] Add "game over" when a user exceeds 9 guesses
 *
 * QUESTIONS:
-* - Is it even possible to change int[] numRange from within a method? Only possible when I initialize numRange
-*   within main(), or elsewhere, as well?
+*   - Variables that need to be global:
+*       - userAttempts
+*       - computerAttempts
+*   - Variables that could be global, but are currently local
+*       - arrayList guessesSoFar
+*       - int[] numRange
+*   - When declaring global variables, do I have to pass them into the method that changes them?
+*     Or can I just change them directly via ClassName.variableName?
+*     It seems that I don't have to access them with ClassName.variableName - why not?
 *
 * BUGS:
+* --- SOLVED ---
 *  - String guessesSoFar is reset every time a player makes a guess.
 *       => Add each guess to arrayList guessesSOFar and print them after each guess. Pass them into the methods to change them.
-*  - Improve formatting with ===, as it's hard to see the computer's guesses.
-*  - "Current player: user" is printed twice in a row.
-*  - I am not checking who won!!
+* SOLUTION: Used arrayList instead of String, add new guesses to it and print it after every guess
+*  userAttempts seems to be reset on every call of one of the methods
+*       SOLUTION: Made userAttempts and computerAttempts global variables.
+* --------
 
-* How to slice an array in Java (when changing numRange)?
 * STRATEGY 1
 *
 * =======================
@@ -104,30 +112,32 @@
     *   anotherRound = ask user again
 * */
 
-
+// Methoden kleinschreiben
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 
 public class GuessNumberAdvanced {
+    public static int userAttempts = 0;
+    public static int computerAttempts = 0;
+    public static Boolean numberGuessed = false;
+
     public static void main(String[] args) {
         // Check this
         while (playRound() == 1) {
             playRound();
         }
+
     }
 
     static int playRound() {
-        // Players: User, computer
         int userGuess;
         int computerGuess;
-        int userAttempts = 0;
-        int computerAttempts = 0;
-        String guessesSoFar = "";
+        ArrayList <Integer> guessesSoFar = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
-        Boolean numberGuessed = false;
 
         // Generate an integer range
-        System.out.println("Enter an integer.");
+        System.out.println("Let's create an integer range! Enter the first integer.");
         int rangeStart = scanner.nextInt();
         System.out.println("Enter another integer that is different from the first.");
         int rangeEnd = scanner.nextInt();
@@ -136,81 +146,69 @@ public class GuessNumberAdvanced {
             rangeEnd = scanner.nextInt();
         }
         System.out.println("The two integers entered by the user: " + rangeStart + " and " + rangeEnd);
-        int[] numRange = { rangeStart, rangeEnd }; // "reassigned local variable" - what does that mean?
+        int[] numRange = {rangeStart, rangeEnd};
 
         // Create random number within numRange
         Random random = new Random();
-        // Does this create a random number within numRange?
-        int randomNum = random.nextInt(rangeStart, rangeEnd + 1);
+        // Formula: random.nextInt(max - min + 1) + min
+        int randomNum = random.nextInt(rangeEnd - rangeStart + 1) + rangeStart;
+        System.out.println("Random number: " + randomNum);
         System.out.println("A random integer between " + rangeStart + " and " + rangeEnd + " has been generated.");
-        System.out.println("random integer: " + randomNum);
 
         // Decide who will start playing
-        // Does this create a random int between 0 and 1?
-        int startsFirst = random.nextInt(0, 2);
+        // Randomly create either 0 or 1:
+        int startsFirst = random.nextInt(2);
 
-        while (numberGuessed == false) {
+        while (!numberGuessed) {
             // If user starts the round:
             if (startsFirst == 0) {
-                // --- Extract into method UserPlays() --- // returns Boolean numberGuessed
-                numberGuessed = UserPlays(randomNum, userAttempts, guessesSoFar, numRange, numberGuessed);
-                if (numberGuessed == true) {
-                    System.out.println("Congratulations to the user! You won!");
+                if (GuessNumberAdvanced.userAttempts < 9) {
+                    // --- Extract into method UserPlays() --- // returns Boolean numberGuessed
+                    numberGuessed = userPlays(randomNum, guessesSoFar, numRange);
+                    if (numberGuessed) {
+                        System.out.println("Congratulations to the user! You won!");
+                    }
+                } else {
+                    System.out.println("You have had 9 attempts. Game over.");
                 }
-//                System.out.println("Current player: user.");
-//                // let user guess (returns userGuess)
-//                userGuess = LetUserGuess(randomNum, userAttempts, guessesSoFar, numRange);
-//                guessesSoFar += userGuess + ", ";
-//                System.out.println("Both players' guesses so far: " + guessesSoFar);
-//                // Check user's guess (returns true or false)
-//                numberGuessed = CheckPlayerGuess(userGuess, randomNum, numberGuessed, numRange);
-                // ---- End of method UserPlays() ----
-                // If the user guessed incorrectly, it's the computer's turn:
-                if (numberGuessed == false) {
-                    // Let computer play
-                    System.out.println("Current player: computer.");
-                    numberGuessed = ComputerPlays(randomNum, computerAttempts, guessesSoFar, numRange, numberGuessed);
+
+                if (GuessNumberAdvanced.computerAttempts < 9) {
+                    // If the user guessed incorrectly, it's the computer's turn:
+                    if (numberGuessed == false) {
+                        // Let computer play
+                        numberGuessed = computerPlays(randomNum, guessesSoFar, numRange);
+                        System.out.println("computer attempts: " + computerAttempts);
+                        if (numberGuessed == true) {
+                            System.out.println("The computer won!");
+                        }
+                    }
+                } else {
+                    System.out.println("The computer has had 9 attempts. Game over for the computer.");
+                }
+
+                // If computer starts the round:
+            } else if (startsFirst == 1) {
+                if (GuessNumberAdvanced.computerAttempts < 9) {
+                    // Let computer guess
+                    numberGuessed = computerPlays(randomNum, guessesSoFar, numRange);
                     if (numberGuessed == true) {
                         System.out.println("The computer won!");
                     }
-//                    // Let computer guess
-//                    computerGuess = random.nextInt(numRange[0], numRange[1] + 1);
-//                    System.out.println("The computer's guess: " + computerGuess);
-//                    guessesSoFar += computerGuess + ", ";
-//                    System.out.println("Both players' guesses so far: " + guessesSoFar);
-//                    // Check user's guess (returns true or false)
-//                    numberGuessed = CheckPlayerGuess(computerGuess, randomNum, numberGuessed, numRange);
+                } else {
+                    System.out.println("The computer has had 9 attempts. Game over for the computer.");
                 }
 
-            // If computer starts the round:
-            } else if (startsFirst == 1) {
-                System.out.println("Current player: computer.");
-                // Let computer guess
-                numberGuessed = ComputerPlays(randomNum, computerAttempts, guessesSoFar, numRange, numberGuessed);
-                if (numberGuessed == true) {
-                    System.out.println("The computer won!");
-                }
-//                computerGuess = random.nextInt(numRange[0], numRange[1] + 1);
-//                System.out.println("The computer's guess: " + computerGuess);
-//                guessesSoFar += computerGuess + ", ";
-//                System.out.println("Both players' guesses so far: " + guessesSoFar);
-//                // Check user's guess (returns true or false)
-//                numberGuessed = CheckPlayerGuess(computerGuess, randomNum, numberGuessed, numRange);
-
-                // If the computer guessed incorrectly, it's the user's turn:
-                if (numberGuessed == false) {
-                    // Let the user play
-                    System.out.println("Current player: user.");
-                    numberGuessed = UserPlays(randomNum, userAttempts, guessesSoFar, numRange, numberGuessed);
-                    if (numberGuessed == true) {
-                        System.out.println("Congratulations to the user! You won!");
+                if (GuessNumberAdvanced.userAttempts < 9) {
+                    // If the computer guessed incorrectly, it's the user's turn:
+                    if (numberGuessed == false) {
+                        // Let the user play
+                        numberGuessed = userPlays(randomNum, guessesSoFar, numRange);
+                        if (numberGuessed == true) {
+                            System.out.println("Congratulations to the user! You won!");
+                        }
                     }
-//                    // let user guess (returns userGuess)
-//                    userGuess = LetUserGuess(randomNum, userAttempts, guessesSoFar, numRange);
-//                    guessesSoFar += userGuess + ", ";
-//                    System.out.println("Both players' guesses so far: " + guessesSoFar);
-//                    // Check user's guess (returns true or false)
-//                    numberGuessed = CheckPlayerGuess(userGuess, randomNum, numberGuessed, numRange);
+                } else {
+                    System.out.println("You have had 9 attempts. Game over.");
                 }
             }
         }
@@ -225,7 +223,7 @@ public class GuessNumberAdvanced {
         return anotherRound;
     }
 
-    static int LetUserGuess(int randomNum, int userAttempts, String guessesSoFar, int[] numRange) {
+    static int letUserGuess(int randomNum, ArrayList<Integer> guessesSoFar, int[] numRange) {
         // Let user guess a number
         System.out.println("Please guess an integer between " + numRange[0] + " and " + numRange[1] + " .");
         // Ask user to guess random number in range
@@ -239,22 +237,25 @@ public class GuessNumberAdvanced {
             userGuess = scanner.nextInt();
         }
         // User guesses out of numRange do not count towards userAttempts number
-        userAttempts++;
+        GuessNumberAdvanced.userAttempts++;
+        System.out.println("user attempts: " + userAttempts);
         return userGuess;
     }
 
-    static Boolean CheckPlayerGuess(int playerGuess, int randomNum, Boolean numberGuessed, int[] numRange) {
+    static boolean checkPlayerGuess(int playerGuess, int randomNum, int[] numRange) {
         if (playerGuess > randomNum) {
             System.out.println("The number you guessed is greater than the random number.");
             // numRange = [rangeStart, userGuess - 1]
             // Does this edit numRange in playRound? Should I put numRange in main()?
-            ChangeNumRange(numRange, playerGuess - 1, 1);
+            //ChangeNumRange(numRange, playerGuess - 1, 1);
+            numRange[1] = playerGuess - 1;
 
         } else if (playerGuess < randomNum) {
             System.out.println("The number you guessed is smaller than the random number.");
             // numRange = [userGuess + 1, rangeEnd]
             // Does this edit numRange in playRound? Should I put numRange in main()?
-            ChangeNumRange(numRange, playerGuess + 1, 0);
+            //ChangeNumRange(numRange, playerGuess + 1, 0);
+            numRange[0] = playerGuess + 1;
         }
 
         if (playerGuess == randomNum) {
@@ -264,182 +265,39 @@ public class GuessNumberAdvanced {
         return numberGuessed;
     }
 
-    static int[] ChangeNumRange(int[] numRange, int newRangeBorder, int indexToChange) {
+    /*static int[] ChangeNumRange(int[] numRange, int newRangeBorder, int indexToChange) {
         numRange[indexToChange] = newRangeBorder;
         return numRange;
-    }
+    }*/
 
-    static Boolean UserPlays(int randomNum, int userAttempts, String guessesSoFar, int[] numRange, Boolean numberGuessed) {
+    static boolean userPlays(int randomNum, ArrayList<Integer> guessesSoFar, int[] numRange) {
         int userGuess;
-        System.out.println("Current player: user.");
+        System.out.println("=================\nCurrent player: user.\n=================");
         // let user guess (returns userGuess)
-        userGuess = LetUserGuess(randomNum, userAttempts, guessesSoFar, numRange);
-        guessesSoFar += userGuess + ", ";
+        userGuess = letUserGuess(randomNum, guessesSoFar, numRange);
+        guessesSoFar.add(userGuess);
         System.out.println("Both players' guesses so far: " + guessesSoFar);
         // Check user's guess (returns true or false)
-        numberGuessed = CheckPlayerGuess(userGuess, randomNum, numberGuessed, numRange);
+        numberGuessed = checkPlayerGuess(userGuess, randomNum, numRange);
         return numberGuessed;
     }
 
-    static Boolean ComputerPlays(int randomNum, int userAttempts, String guessesSoFar, int[] numRange, Boolean numberGuessed) {
+    static boolean computerPlays(int randomNum, ArrayList<Integer> guessesSoFar, int[] numRange) {
         int computerGuess;
+        System.out.println("=================\nCurrent player: computer.\n=================");
         // Let computer guess
         Random random = new Random();
         System.out.println("Please guess an integer between " + numRange[0] + " and " + numRange[1] + " .");
         computerGuess = random.nextInt(numRange[0], numRange[1] + 1);
+        GuessNumberAdvanced.computerAttempts++;
+        // Do I have to address computerAttempts by adding the className before?
+        System.out.println("computer attempts: " + computerAttempts);
         System.out.println("The computer's guess: " + computerGuess);
-        guessesSoFar += computerGuess + ", ";
+        guessesSoFar.add(computerGuess);
         System.out.println("Both players' guesses so far: " + guessesSoFar);
         // Check user's guess (returns true or false)
-        numberGuessed = CheckPlayerGuess(computerGuess, randomNum, numberGuessed, numRange);
+        numberGuessed = checkPlayerGuess(computerGuess, randomNum, numRange);
         return numberGuessed;
     }
 
-//    static int playRound() {
-//        int userGuess;
-//        int computerGuess;
-//        int userAttempts = 0;
-//        int computerAttempts = 0;
-//        String previousGuesses = "";
-//
-//        // Let user choose an integer range
-//        Scanner scanner = new Scanner(System.in);
-//        System.out.println("Please enter an integer.");
-//        int rangeStart = scanner.nextInt();
-//        // OPTION: Let user enter two integers, sort them and add the to number range in ascending order
-//        System.out.println("Please enter another integer, greater than the first one.");
-//        int rangeEnd = scanner.nextInt();
-//        while (rangeStart == rangeEnd) {
-//            System.out.println("The second integer should be different from the first. Please try again and enter another integer.");
-//            rangeEnd = scanner.nextInt();
-//        }
-//
-//        while (rangeStart > rangeEnd) {
-//            System.out.println("The second integer should be greater than the first. Please try again and enter another integer.");
-//            rangeEnd = scanner.nextInt();
-//        }
-//
-//        int numRange[] = { rangeStart, rangeEnd };
-//
-//        // Create random number within numRange
-//        Random random = new Random();
-//        // Does this create a random number within numRange?
-//        int randomNum = random.nextInt(rangeStart, rangeEnd + 1);
-//        System.out.println("A random integer between " + rangeStart + " " + rangeEnd + " has been generated. Time to play!");
-//        // What do I need this for?
-//        int anotherRound = 0;
-//
-//        // Decide who will start playing
-//        // Does this create only 0 and 1?
-//        // Are there easier ways to create either a true or false/ 1 or 0?
-//        int startsFirst = random.nextInt(0, 2);
-//        System.out.println("startsFirst: " + startsFirst);
-//        if (startsFirst == 0) {
-//            // user starts playing // extract into method userAttempts() later
-//            System.out.println("User: Your turn. Please guess an integer between " + rangeStart + " and " + rangeEnd + " .");
-//            // Ask user to guess random number in range
-//            // **** repeat guesses until user guesses correctly
-//            userGuess = scanner.nextInt();
-//            while (userGuess < rangeStart || userGuess > rangeEnd) {
-//                // New " after \n necessary?
-//                System.out.println("The number you entered is not within the given number range.\n" +
-//                        "Please try again and enter an integer between " + rangeStart + " and " + rangeEnd + " .");
-//                userGuess = scanner.nextInt();
-//            }
-//            // User guesses out of numRange do not count towards userAttempts number
-//            userAttempts++;
-//
-//
-//
-//            while (userGuess != randomNum && userAttempts <= 9) {
-//                previousGuesses = checkUserGuess(userGuess, randomNum, previousGuesses, numRange);
-//                System.out.println("Try again and guess an integer between " + rangeStart + " and " + rangeEnd + ".");
-//                userGuess = scanner.nextInt();
-//                userAttempts++;
-//            }
-//
-//        } else if (startsFirst == 1) {
-//            // computer starts playing
-//        }
-//
-//
-//
-//        if (guesses > 9) {
-//            System.out.println("You have guessed too many times. Game over.");
-//        }
-//
-//        if (numGuess == randomNum) {
-//            previousGuesses += "" + numGuess + ", ";
-//            System.out.println("Your guesses so far: " + previousGuesses);
-//            System.out.println("You guessed the number correctly! Well done!");
-//            System.out.println("Would you like to play another round? Press 1 for yes and 0 for no.");
-//            anotherRound = scanner.nextInt();
-//        }
-//
-//        return anotherRound;
-//    }
-//
-//
-//
-//    static String checkUserGuess(int userGuess, int randomNum, String previousGuesses, int[] numRange) {
-//        if (userGuess > randomNum) {
-//            System.out.println("The number you guessed is greater than the random number.");
-//            // changenumRange()
-//        } else if (userGuess < randomNum) {
-//            System.out.println("The number you guessed is smaller than the random number.");
-//            // changenumRange()
-//        }
-//
-//        previousGuesses += "" + userGuess + ", ";
-//        System.out.println("Your guesses so far: " + previousGuesses);
-//        return previousGuesses;
-//        // return numRange
-////        System.out.println("Please guess an integer between " + rangeStart + " and " + rangeEnd + " .");
-////        numGuess = scanner.nextInt();
-//    }
-//
-//    static String checkComputerGuess(int computerGuess, int randomNum, String previousGuesses, int[] numRange) {
-//        if (computerGuess > randomNum) {
-//            System.out.println("The number you guessed is greater than the random number.");
-//        } else if (computerGuess < randomNum) {
-//            System.out.println("The number you guessed is smaller than the random number.");
-//        }
-//
-//        previousGuesses += "" + computerGuess + ", ";
-//        System.out.println("Your guesses so far: " + previousGuesses);
-//        return previousGuesses;
-//        // return numRange
-//    }
-
-//    static int[] changenumRange(int[] numRange) {
-//        // numRange = [a, userGuess - 1] OR
-//        // numRange = [userGuess + 1, b]
-//    }
 }
-
-
-/*
-TRACE
-
-user
-computer
-* computerAttempts = 0
-* guessesSoFar = "11, 1, 21"
-userAttempts = 2
-computerAttempts = 1
-numberGuessed = true
-randomNum = 20
-userGuess = 21
-computerGuess = 20
-numRange = [15, 20]
-
-a = 10
-b = 50
-startsFirst = 0
-anotherRound = 1
-
-=====
-
-EDGE CASES
-
- */
