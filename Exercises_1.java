@@ -1,4 +1,4 @@
-import java.sql.SQLOutput;
+// URL to exercises in German and English: https://wiki.streampy.at/index.php?title=Java_-_Einf%C3%BChrung
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -176,21 +176,48 @@ public class Exercises_1 {
 
 
         // Aufgabe: Berechnung des Maximums
+//        Scanner scanner = new Scanner(System.in);
+//        int number;
+//        List<Integer> nums = new ArrayList<>();
+//        System.out.println("Enter an integer.");
+//        // Warum nicht mit do-while?
+//        while (!scanner.hasNext("q") && !scanner.hasNext("Q")) {
+//            number = scanner.nextInt(); // or nextLine()
+//            nums.add(number);
+//            System.out.println("number: " + number);
+//            System.out.println("Enter an integer, or 'q' ('Q') to cancel.");
+//        }
+//
+//        System.out.println(nums);
+//        Integer max = Collections.max(nums);
+//        System.out.println("max number: " + max);
+
+
+        // Aufgabe: Leetspeak
+
         Scanner scanner = new Scanner(System.in);
-        int number;
-        List<Integer> nums = new ArrayList<>();
-        System.out.println("Enter an integer.");
-        // Warum nicht mit do-while?
-        while (!scanner.hasNext("q") && !scanner.hasNext("Q")) {
-            number = scanner.nextInt(); // or nextLine()
-            nums.add(number);
-            System.out.println("number: " + number);
-            System.out.println("Enter an integer.");
+        System.out.println("Enter a message that you would like to encrypt in Leetspeak.");
+        String message = scanner.nextLine().toUpperCase();
+
+        // Create HashMap with `letter` : `leetspeak version` as key-value pairs:
+        HashMap<Character, Character> leetSpeakMap = new HashMap<Character, Character>();
+        char[] leetspeakChars = "@8(D3F6#!JK1MN0PQR$7UVWXY2".toCharArray();
+        int j = 0;
+        for (int i = 65; i < 91; i++) {
+            leetSpeakMap.put((char) i, leetspeakChars[j]);
+            j++;
         }
 
-        System.out.println(nums);
-        Integer max = Collections.max(nums);
-        System.out.println("max number: " + max);
-        // Aufgabe: Leetspeak
+        // Encrypt message:
+        StringBuilder encryptedString = new StringBuilder();
+        for (int i = 0; i < message.length(); i++) {
+            if (message.charAt(i) >= 'A' && message.charAt(i) <= 'Z') {
+                encryptedString.append(leetSpeakMap.get(message.charAt(i)));
+            } else {
+                encryptedString.append(message.charAt(i));
+            }
+        }
+
+        System.out.println("Encrypted message: " + encryptedString);
     }
 }
