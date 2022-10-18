@@ -1,3 +1,9 @@
+/*
+* BUGS
+*
+* [3, 2, 1, 0, -1] is sorted as [-1, 0, 1, 2, 1] - Why?
+* */
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -5,7 +11,7 @@ public class InsertionSortV2 {
     public static void main(String[] args) {
         // array = 3 2 6 4 1
         ArrayList<Integer> nums = new ArrayList<Integer>(
-                Arrays.asList(3, 2, 6, 4, 1)
+                Arrays.asList(3, 2, 1, 0, -1)
         );
         // Includes the given index
         int sortedUntilIndex = 0;
