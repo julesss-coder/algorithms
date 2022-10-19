@@ -1,7 +1,22 @@
 /*
-* BUGS
-*
-* [3, 2, 1, 0, -1] is sorted as [-1, 0, 1, 2, 1] - Why?
+* TEST CASES
+* === TESTED ===
+* positive and neg numbers
+    * numbers including 0 OK
+    * no 0 OK
+    * duplicates OK
+    * no duplicates OK
+
+* negative numbers
+    * duplicates OK
+    * no duplicates OK
+    *
+* positive numbers
+    * duplicates OK
+    * no duplicates OK
+
+* * one number only OK
+* * empty array OK
 * */
 
 import java.util.ArrayList;
@@ -9,51 +24,34 @@ import java.util.Arrays;
 
 public class InsertionSortV2 {
     public static void main(String[] args) {
-        // array = 3 2 6 4 1
         ArrayList<Integer> nums = new ArrayList<Integer>(
-                Arrays.asList(3, 2, 1, 0, -1)
+                Arrays.asList(34, -394, 0, 45, 0, 23)
         );
-        // Includes the given index
-        int sortedUntilIndex = 0;
-        // For each number in nums, starting from the first:
+
+        // As first number is considered sorted, start iterating from the second:
         for (int indexOfNumToBeSorted = 1; indexOfNumToBeSorted < nums.size(); indexOfNumToBeSorted++) {
             int numToBeSorted = nums.get(indexOfNumToBeSorted);
-            int index = indexOfNumToBeSorted - 1;
 
-            if (numToBeSorted < nums.get(index)) {
-                // Checking if numToBeSorted < nums[index] is necessary despite previous line, because index is changed.
-                while (index >= 0 && numToBeSorted < nums.get(index)) {
-                    index--;
+            // Find out where to insert numToBeSorted by comparing numToBeSorted with left neighbour:
+            int i = indexOfNumToBeSorted - 1;
+            if (numToBeSorted < nums.get(i)) {
+                // Checking if numToBeSorted < nums[i] is necessary despite previous line, because `i` is changed.
+                while (i >= 0 && numToBeSorted < nums.get(i)) {
+                    i--;
+                }
+                int insertionIndex = i + 1;
+
+                // Insert numToBeSorted at insertionIndex:
+                    // Starting with numToBeSorted, swap each number with its left neighbour until before insertionIndex.
+                for (int j = indexOfNumToBeSorted; j > insertionIndex ; j--) {
+                    int temp = nums.get(j - 1);
+                    nums.set(j, temp);
                 }
 
-                int insertionIndex = index + 1;
-                int temp1 = nums.get(insertionIndex);
                 nums.set(insertionIndex, numToBeSorted);
-                insertionIndex++;
-
-                while (insertionIndex < indexOfNumToBeSorted) {
-                    int temp2 = nums.get(insertionIndex);
-                    nums.set(insertionIndex, temp1);
-                    insertionIndex++;
-                    temp1 = nums.get(insertionIndex);
-                    nums.set(insertionIndex, temp2);
-                    insertionIndex++;
-                }
-                // Once insertionindex === 5, the array is sorted correctly, but the next line reinserts `temp1` at last
-                // position.
-                // Fix: Can this line be put into while loop?
-                // Current fix: Set if condition:
-                if (insertionIndex < nums.size()) {
-                    nums.set(indexOfNumToBeSorted, temp1);
-                }
-                sortedUntilIndex++;
-            } else {
-                sortedUntilIndex++;
-                continue;
             }
         }
 
         System.out.println("Sorted array `nums`: " + nums);
-
     }
 }
