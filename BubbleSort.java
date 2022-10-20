@@ -66,20 +66,3 @@ public class BubbleSort {
         }
     }
 }
-
-/*
-* Trace
-* ============================================================================================
-* sortedElements = 3
-* numbers = {1, 3, 5, 9}
-* i                *
-* j          *
-*
-* i = 2
-* j = 0
-* numbers.length - 1 - sortedElements = 0
-*
-* temp = 1
-*
-*
-* */
