@@ -45,9 +45,10 @@
 
 public class BubbleSort {
     public static void main(String[] args) {
-        int[] numbers = {5, 9, 3, 1, 2, 8, 4, 7, 6};
+        int[] numbers = {5, 9, 3, 1};
         int sortedElements = 0;
 
+        // On each iteration (i), transport the largest number to the end of the array
         int i = 0;
         while (i < numbers.length - 1) {
             for (int j = 0; j < numbers.length - 1 - sortedElements; j++) {
