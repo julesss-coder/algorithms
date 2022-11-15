@@ -86,6 +86,8 @@ BUGS:
 UNSOLVED:
 - [ ] When debugging the code from the second row, the first row in `field` has been changed to [., ., .]. These
       changes should have been made in `newField`, not in the original field. I.e. using an incorrect reference point.
+- [ ] First cell in second row does not get changed to #. Possible reason: Am I not adding up the neighbours of ONE cell?
+      Am I resetting the number of neighbours with (some/each)function call(s)?
  */
 
 import java.util.ArrayList;
@@ -193,7 +195,7 @@ public class ConwayGameOfLife {
             // Else, check the previous, current and next cell:
             } else {
                 cellBeginIndex = cellIndex - 1;
-                cellEndIndex = + 1 ;
+                cellEndIndex = cellIndex + 1 ;
                 neighbours = checkCells(row, cellBeginIndex, cellEndIndex, rowIndex, cellIndex, i, neighbours);
             }
         }
