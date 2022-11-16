@@ -1,4 +1,8 @@
 /*
+Checking for live/dead cells is unnecessary
+ */
+
+/*
 STRATEGY 1
 
 field size: 3 x 3
@@ -102,15 +106,39 @@ import java.util.Arrays;
 public class ConwayGameOfLifeV1 {
     public static void main(String[] args) {
         // Create nested ArrayList
+        int[][] arr = new int[10][10];
+
+
+
         ArrayList<ArrayList<Character>> field = new ArrayList<ArrayList<Character>>();
         // Add three rows
         field.add(new ArrayList<Character>(Arrays.asList('.', '#', '.')));
         field.add(new ArrayList<Character>(Arrays.asList('.', '.', '#')));
         field.add(new ArrayList<Character>(Arrays.asList('#', '#', '#')));
 
+//        field.add(new ArrayList<Character>(Arrays.asList('#', '.', '#')));
+//        field.add(new ArrayList<Character>(Arrays.asList('.', '#', '#')));
+//        field.add(new ArrayList<Character>(Arrays.asList('.', '#', '.')));
+
+//        for (int i = 0; i < field.size(); i++) {
+//            System.out.println(field.get(i));
+//        }
+
+        ArrayList<Integer> a = new ArrayList<>();
+
+        Integer.parseInt("3");
+
+        ArrayList<ArrayList<Character>> field2 = new ArrayList<>(field);
+        field2.get(0).set(0, 'D');
+        System.out.println("field");
         for (int i = 0; i < field.size(); i++) {
             System.out.println(field.get(i));
         }
+        System.out.println("field2");
+        for (int i = 0; i < field2.size(); i++) {
+            System.out.println(field2.get(i));
+        }
+
 
         // Create copy of field === WHAT IS THE BEST WAY TO DO THIS? ===
         // clone() creates a copy with reference, but I need a copy of the values only
@@ -145,7 +173,7 @@ public class ConwayGameOfLifeV1 {
                         newField.get(i).set(j, '#');
                         System.out.println("Setting cell: " + i + " " + j + " to " + " #");
                     }
-                // Else if cell is populated:
+                    // Else if cell is populated:
                 } else if (row.get(j) == '#') {
                     // Check 8 surrounding cells
                     neighbours = checkNeighbouringRows(field, i, j);
@@ -155,7 +183,7 @@ public class ConwayGameOfLifeV1 {
                         newField.get(i).set(j, '.');
                         System.out.println("Setting cell: " + i + " " + j + " to " + " .");
                     }
-                // If neighbours === 2 || neighbours === 3: Leave cell as it is
+                    // If neighbours === 2 || neighbours === 3: Leave cell as it is
                 }
             }
             System.out.println("Field: " + field + " newField: " + newField);
