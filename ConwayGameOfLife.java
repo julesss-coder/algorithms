@@ -62,16 +62,32 @@ countLiveNeighbours(array, rowIndex, cellIndex)
  */
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
 
 public class ConwayGameOfLifeV2 {
     public static void main(String[] args) {
-        int fieldLength = 10;
-        int fieldWidth = 10;
-        int[][] field = initializeArray(fieldLength, fieldWidth);
-        int generations = 5;
+        int[] fieldSize = letUserChooseFieldSize();
+        int fieldLength = fieldSize[0];
+        int fieldWidth = fieldSize[1];
+
+        // Randomly choose number of live cells
+        Random random = new Random();
+        int numberOfLiveCells = random.nextInt(0, (int) (fieldLength * fieldWidth) / 4);
+        System.out.println("numberOfLiveCells: " + numberOfLiveCells);
+
+        int[][] field = initializeArray(fieldLength, fieldWidth, numberOfLiveCells);
+
+        // Let user choose number of generations
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the number of generations you would like to play Game of Life (integers only).");
+        int generations = scanner.nextInt();
+        System.out.println("Number of generations: " + generations);
+
+        // Play Game of Life `generations` times:
         int counter = 0;
         while (counter < generations) {
-            int[][] nextGeneration = createNextGeneration(field);
+            int[][] nextGeneration = createNextGeneration(field, fieldLength, fieldWidth);
             System.out.println("nextgeneration: ");
             for (int i = 0; i < nextGeneration.length; i++) {
                 System.out.println(Arrays.toString(nextGeneration[i]));
@@ -82,7 +98,7 @@ public class ConwayGameOfLifeV2 {
         System.out.println("Game ends.");
     }
 
-    public static int[][] initializeArray(int fieldLength, int fieldWidth) {
+    public static int[][] initializeArray(int fieldLength, int fieldWidth, int numberOfLiveCells) {
         int[][] field = new int[fieldLength][fieldWidth];
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
@@ -90,22 +106,37 @@ public class ConwayGameOfLifeV2 {
             }
         }
 
-        // Live cells and their positions
-        int[][] cellNumbers = {
-                {0, 1, 0},
-                {1, 1, 1},
-                {0, 1, 0}
-        };
+        field = randomlyMarkCellsLive(field, numberOfLiveCells);
 
-        // Fill in live cells into field
-        for (int i = 0; i < cellNumbers.length; i++) {
-            for (int j = 0; j < cellNumbers[i].length; j++) {
-                // Position the live cells in cellNumbers in the center of the array, so there is as much space for them to grow as possible
-                int startingRow = (int) Math.floor((fieldLength - cellNumbers[0].length) / 2);
-                int startingColumn = (int) Math.floor((fieldWidth - cellNumbers.length) / 2);
-                field[startingRow + i][startingColumn + j] = cellNumbers[i][j];
-            }
-        }
+        // === TODO: randomly spread `numberOfLiveCells` live cells throughout field ===
+        /*
+        numberOfLiveCells times:
+            for each cell starting from starting cell (fieldLength - (int) sqrrt(numberOfCells) / 2
+                create double
+                if double > 0.3:
+                    make cell a 1
+
+
+         */
+
+
+        // === OPTIONAL: only spread them within certain part of array ===
+        // Live cells and their positions
+//        int[][] cellNumbers = {
+//                {0, 1, 0},
+//                {1, 1, 1},
+//                {0, 1, 0}
+//        };
+//
+//        // Fill in live cells into field
+//        for (int i = 0; i < cellNumbers.length; i++) {
+//            for (int j = 0; j < cellNumbers[i].length; j++) {
+//                // Position the live cells in cellNumbers in the center of the array, so there is as much space for them to grow as possible
+//                int startingRow = (int) Math.floor((fieldLength - cellNumbers[0].length) / 2);
+//                int startingColumn = (int) Math.floor((fieldWidth - cellNumbers.length) / 2);
+//                field[startingRow + i][startingColumn + j] = cellNumbers[i][j];
+//            }
+//        }
 
 //        System.out.println(Arrays.deepToString(field));
         for (int i = 0; i < field.length; i++) {
@@ -114,9 +145,9 @@ public class ConwayGameOfLifeV2 {
         return field;
     }
 
-    public static int[][] createNextGeneration(int[][] field) {
+    public static int[][] createNextGeneration(int[][] field, int fieldLength, int fieldWidth) {
         // Make a copy of field, without references
-        int[][] newField = new int[10][10];
+        int[][] newField = new int[fieldLength][fieldWidth];
         for (int i = 0; i < field.length; i++) {
             // Make a deep copy of each int array
             newField[i] = Arrays.copyOf(field[i], field[i].length);
@@ -161,5 +192,32 @@ public class ConwayGameOfLifeV2 {
         }
 
         return liveNeighbours;
+    }
+
+    public static int[] letUserChooseFieldSize() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please choose the field length (integers only).");
+        int fieldLength = scanner.nextInt();
+        System.out.println("Please choose the field width (integers only).");
+        int fieldWidth = scanner.nextInt();
+        int[] fieldSize = {fieldLength, fieldWidth};
+        return fieldSize;
+    }
+
+    public static int[][] randomlyMarkCellsLive(int[][] field, int numberOfLiveCells) {
+        int i = 0;
+        while (i < numberOfLiveCells) {
+            for (int j = 0; j < field.length; j++) {
+                for (int k = 0; k < field[j].length; k++) {
+                    Random random = new Random();
+                    double randomNum = random.nextDouble(0, 1);
+                    if (randomNum > 0.3) {
+                        field[j][k] = 1;
+                        i++;
+                    }
+                }
+            }
+        }
+        return field;
     }
 }
