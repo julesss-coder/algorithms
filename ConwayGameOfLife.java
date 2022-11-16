@@ -19,7 +19,11 @@ InitializeArray(array
     Print array
 
 for the given number of generations:
-    nextGeneration = createNextGeneration(array)
+nextGeneration = createNextGeneration(field)
+
+5 times:
+    field =
+    nextGeneration = createNextGeneration(field)
     Print nextGeneration
     array = nextGeneration // how to pass in the correct array to the next generation?
 
@@ -59,19 +63,27 @@ countLiveNeighbours(array, rowIndex, cellIndex)
 
 import java.util.Arrays;
 
-import static java.util.Arrays.copyOf;
-
 public class ConwayGameOfLifeV2 {
     public static void main(String[] args) {
-        int[][] field = initializeArray();
+        int fieldLength = 10;
+        int fieldWidth = 10;
+        int[][] field = initializeArray(fieldLength, fieldWidth);
         int generations = 5;
-        int[][] nextGeneration = createNextGeneration(field);
-
-
+        int counter = 0;
+        while (counter < generations) {
+            int[][] nextGeneration = createNextGeneration(field);
+            System.out.println("nextgeneration: ");
+            for (int i = 0; i < nextGeneration.length; i++) {
+                System.out.println(Arrays.toString(nextGeneration[i]));
+            }
+            field = nextGeneration;
+            counter++;
+        }
+        System.out.println("Game ends.");
     }
 
-    public static int[][] initializeArray() {
-        int[][] field = new int[10][10];
+    public static int[][] initializeArray(int fieldLength, int fieldWidth) {
+        int[][] field = new int[fieldLength][fieldWidth];
         for (int i = 0; i < field.length; i++) {
             for (int j = 0; j < field[i].length; j++) {
                 field[i][j] = 0;
@@ -81,18 +93,24 @@ public class ConwayGameOfLifeV2 {
         // Live cells and their positions
         int[][] cellNumbers = {
                 {0, 1, 0},
-                {0, 0, 1},
-                {1, 1, 1}
+                {1, 1, 1},
+                {0, 1, 0}
         };
 
         // Fill in live cells into field
         for (int i = 0; i < cellNumbers.length; i++) {
             for (int j = 0; j < cellNumbers[i].length; j++) {
-                field[i][j] = cellNumbers[i][j];
+                // Position the live cells in cellNumbers in the center of the array, so there is as much space for them to grow as possible
+                int startingRow = (int) Math.floor((fieldLength - cellNumbers[0].length) / 2);
+                int startingColumn = (int) Math.floor((fieldWidth - cellNumbers.length) / 2);
+                field[startingRow + i][startingColumn + j] = cellNumbers[i][j];
             }
         }
 
-        System.out.println(Arrays.deepToString(field));
+//        System.out.println(Arrays.deepToString(field));
+        for (int i = 0; i < field.length; i++) {
+            System.out.println(Arrays.toString(field[i]));
+        }
         return field;
     }
 
@@ -132,7 +150,7 @@ public class ConwayGameOfLifeV2 {
                     // Check that you are not stepping outside the array
                     if (j >= 0 && j < field[i].length) {
                         // Skip the cell whose neighbours we are checking for live cells
-                        if (i != rowIndex && j != cellIndex) {
+                        if (!(i == rowIndex && j == cellIndex)) {
                             if (field[i][j] == 1) {
                                 liveNeighbours++;
                             }
