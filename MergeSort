@@ -1,0 +1,66 @@
+import java.util.Arrays;
+
+public class MergeSort {
+    public static void main(String[] args) {
+        // [5, 9, 1, 4, 6, 7, 3, 2, 8]
+        int[] array = {5, 9, 1};
+        System.out.println("Unsorted array: " + Arrays.toString(array));
+        mergeSort(array, array.length);
+        System.out.println("Sorted array: " + Arrays.toString(array));
+    }
+
+    static void mergeSort(int[] array, int arrayLength) {
+        // Base case: arrayLength === 1
+        // Check for empty arrays at the same time:
+        if (arrayLength <= 1) {
+            System.out.println("Array in base case: " + Arrays.toString(array));
+            return;
+        }
+
+        // Is typecasting necessary here?
+        // Divide array in half
+        int middleIndex = (int) arrayLength / 2;
+        int[] leftArray = Arrays.copyOfRange(array, 0, middleIndex);
+        int[] rightArray = Arrays.copyOfRange(array, middleIndex, arrayLength);
+        System.out.println("left array: " + Arrays.toString(leftArray));
+        System.out.println("right array: " + Arrays.toString(rightArray));
+        mergeSort(leftArray, leftArray.length);
+        mergeSort(rightArray, rightArray.length);
+
+        merge(array, leftArray, rightArray);
+    }
+
+    static int[] merge(int[] array, int[] leftArray, int[] rightArray) {
+        int leftArrayLength = leftArray.length;
+        int rightArrayLength = rightArray.length;
+
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        while (i < leftArrayLength && j < rightArrayLength) {
+            if (leftArray[i] <= rightArray[j]) {
+                array[k] = leftArray[i];
+                i++;
+            } else if (leftArray[i] > rightArray[j]) {
+                array[k] = rightArray[j];
+                j++;
+            }
+            k++;
+        }
+
+        // Add the elements in leftArray and rightArray we have not iterated over to the end of array
+        while (i < leftArrayLength) {
+            array[k] = leftArray[i];
+            i++;
+            k++;
+        }
+
+        while (j < rightArrayLength) {
+            array[k] = rightArray[j];
+            j++;
+            k++;
+        }
+
+        return array;
+    }
+}
