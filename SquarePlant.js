@@ -12,12 +12,13 @@ let squares = 1;
 let years = 4;
 
 function countSquares(years, squares) {
-		if (years === 0) {
-			return 1;
-		}
-		
-		console.log(`squares: ${squares}, years: ${years}`);
-		return squares * 3 + countSquares(years - 1, squares * 3);
+	console.log(`squares: ${squares}, years: ${years}`);
+
+	if (years === 0) {
+		return 1;
+	}
+
+	return squares * 3 + countSquares(years - 1, squares * 3);
 }		
 
 countSquares(years, squares);
