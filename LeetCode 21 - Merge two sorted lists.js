@@ -1,40 +1,38 @@
-// URL: https://leetcode.com/problems/merge-two-sorted-lists/?envType=study-plan&id=level-1
+// URL: https://leetcode.com/problems/merge-two-sorted-lists/
 
-/*
-list1: 1 - 1 - 8 - 9  null
-                      *
-list2: 2 - 3 - 4 - 5 - 10 null
-                          *
+// Problem description: You are given the heads of two sorted linked lists list1 and list2.
 
-mergedList = {1, 1, 2, 3, 4, 5, 8, 9, 10 }
+// Merge the two lists in a one sorted list. The list should be made by splicing together the nodes of the first two lists.
 
-if list1 || list2 is empty:
-  mergedList = the non-empty list
+// Return the head of the merged linked list.
 
-node1 = list1.head
-node2 = list2.head
+var mergeTwoLists = function(list1, list2) {
+  // list1 and list2 are the heads of their respective lists
+  if (list1 === null && list2 === null) {
+    return null;
+  } 
 
-while node1 !== null && node2 !== null:
-  if node1.value > node2.value:
-    add node2 to mergedList
-    node2 = node2.next
-  if node1.value < node2.value:
-    add node1 to mergedList
-    node1 = node1.next
-  if node1.value === node2.value
-    add node1 to mergedList
-    add node2 to mergedList
-    node1 = node1.next
-    node2 = node2.next
+  let sortedList = new ListNode();
+  // `head` will be empty. Only used as access point.
+  let head = sortedList;
 
-if (node1.value !== null):
-  add node1.value to mergedList
-  node1 = node1.next
-else if (node2.value !== null):
-  add node2.value to mergedList
-  node2 = node2.next
+  while (list1 !== null && list2 !== null) {
+    if (list1.val < list2.val) {
+      sortedList.next = new ListNode(list1.val);
+      list1 = list1.next;
+    } else {
+      sortedList.next = new ListNode(list2.val);
+      list2 = list2.next;
+    }
+    sortedList = sortedList.next;
+  }
 
-return mergedList
+  if (list1 === null && list2 !== null) {
+    sortedList.next = list2;
+  } else if (list1 !== null && list2 === null) {
+    sortedList.next = list1;
+  }
 
-
-*/
+  // As `head` is empty, `head.next` is the first node with a valid value and is therefore returned.
+  return head.next;
+};
