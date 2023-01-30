@@ -35,3 +35,23 @@ var reverseList = function(head) {
 
   return reversedList;
 };
+
+/*
+
+PROS
++ Does not change input
+CONS
+- Too slow. Creating a new list takes a lot of time
+
+*/
+
+
+// STRATEGY 2
+// Summary: Reverse references of given list
+
+
+
+// STRATEGY 3
+// Summary: recursive solution
+
+// Sample LeetCode solution
