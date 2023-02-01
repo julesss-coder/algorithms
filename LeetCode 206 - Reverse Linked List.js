@@ -4,13 +4,18 @@ URL: https://leetcode.com/problems/reverse-linked-list/
 Problem description: Given the head of a singly linked list, reverse the list, and return the reversed list.
 */
 
-/**
- * Definition for singly-linked list.
- * function ListNode(val, next) {
- *     this.val = (val===undefined ? 0 : val)
- *     this.next = (next===undefined ? null : next)
- * }
- */
+// Creating my own list for testing
+// Definition for singly-linked list.
+// function ListNode(val, next) {
+//   this.val = (val===undefined ? 0 : val)
+//   this.next = (next===undefined ? null : next)
+// }
+
+// let list = new ListNode(1);
+// list.next = new ListNode(2);
+// list.next.next = new ListNode(3);
+// console.log(list);
+// head = list;
 
 var reverseList = function(head) {
   if (head === null) {
@@ -49,20 +54,6 @@ CONS
 // STRATEGY 2
 // Summary: Reverse references of given list
 
-
-// Creating my own list for testing
-// function ListNode(val, next) {
-//   this.val = (val===undefined ? 0 : val)
-//   this.next = (next===undefined ? null : next)
-// }
-
-// let list = new ListNode(1);
-// list.next = new ListNode(2);
-// list.next.next = new ListNode(3);
-// console.log(list);
-// head = list;
-
-
 var reverseList = function(head) {
   let current = head;
   let previous = null;
@@ -90,5 +81,33 @@ CONS
 - slightly harder to understand for the reader
 */
 
+
+
 // STRATEGY 3
 // Summary: Recursive solution
+
+
+var reverseList = function(head) {
+  // Base case:
+  // Once there is only one node left (once we have reached the last node), return that node.
+  if (head === null || head.next === null) {
+    return head;
+  }
+
+  // Recursive call:
+  // In order to get to the base case:
+    // Pass in the next node in list
+  let reversedList = reverseList(head.next);
+  // At this point, we have gone down to the base cased and returned the last node from it.
+  // `reversedList` now points to the last node in list.
+
+  // Now, we are back in the previous stack frame, where `head` points to the next node on the left.
+  // Set the `next` reference of right neighbour of `head` back to `head`, i.e. reverse the list.
+  // Keep in mind: `reversedList` still points to the node to the right of the `head` we are working with in the current stack frame.
+  // By changing the `next` references as follows, we are also changing them inside `reversedList`, as both `reversedList` and `head` reference the same overall list.
+  head.next.next = head;
+  // Delete the original `next` reference of current node.
+  head.next = null;
+  // Return the reversed list to previous stack frame
+  return reversedList;
+};
