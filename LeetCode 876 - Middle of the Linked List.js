@@ -11,45 +11,6 @@
 // The number of nodes in the list is in the range [1, 100].
 // 1 <= Node.val <= 100
 
-// ----------------------------------------------
-
-// Observations
-
-// Knobs
-
-// Edge cases
-
-// ----------------------------------------------
-
-/*
-Strategy 1
-
-Summary:
-
-Top-down outline:
-
-if head === null || head.next === null:
-  return head
-
-nodeCounter = 0
-
-while current !== null:
-  nodeCounter++
-  current = current.next
-
-current = head
-
-if nodeCounter % 2 === 0:
-  nodeCounter/2 times:
-    current = current.next
-  
-  return current
-else:
-  Math.round(nodeCounter/2) - 1 times:
-    current = current.next
-  
-  return current
-*/
 
 /**
  * Definition for singly-linked list.
@@ -63,21 +24,11 @@ else:
  * @return {ListNode}
  */
 
-// Implementation
+/* =========== Strategy 1 ============
 
-// Creating my own list for testing
-function ListNode(val, next) {
-  this.val = (val===undefined ? 0 : val)
-  this.next = (next===undefined ? null : next)
-}
+Summary: Count nodes, go to middle one and return it.
 
-let list = new ListNode(1);
-list.next = new ListNode(2);
-list.next.next = new ListNode(3);
-console.log(list);
-head = list;
-
-
+*/
 var middleNode = function(head) {
     if (head === null || head.next === null) {
       return head;
@@ -109,32 +60,54 @@ var middleNode = function(head) {
 };
 
 
-// -----------
 
-// LeetCode approach 1
+/* =================== Strategy 2 =======================
 
+Summary: Create all possible heads and return the middle one
 
-// Creating my own list for testing
-function ListNode(val, next) {
-  this.val = (val===undefined ? 0 : val)
-  this.next = (next===undefined ? null : next)
-}
-
-let list = new ListNode(1);
-list.next = new ListNode(2);
-list.next.next = new ListNode(3);
-console.log(list);
-head = list;
+*/
 
 var middleNode = function(head) {
-  // Add in checks for empty list and list with one head
+  if (head === null || head.next === null) {
+    return head;
+  }
 
-  // Put head in an array
-  let A = [head];
-  // While we are not at last node in list:
-  while (A[A.length - 1].next != null)
-      // Add currentNode.next to array
-      A.push(A[A.length - 1].next);
-  // Return the middle node
-  return A[Math.trunc(A.length / 2)];
+  let nodesArray = [];
+
+  while (head !== null) {
+    nodesArray.push(head);
+    head = head.next;
+  }
+
+  // Count lists in array and return the middle node
+  return nodesArray[Math.trunc(nodesArray.length / 2)];
 };
+
+
+/* =========== Strategy 3 ===========
+
+Summary: Move fast pointer two nodes ahead, slow pointer one node ahead on each iteration. Once fast pointer is at last node or out of bounds, 
+slow pointer is at middle node.
+*/
+
+/* Observation:
+In odd-numbered lists:
+  Once `fast` is at last node, `slow` is at middle node. => Loop condition to be fulfilled: fast.next !== null.
+In even-numbered lists: 
+  Once `fast` goes out of bounds, `slow` is at middle point. => Loop condition to be fulfilled: fast !== null.
+*/
+
+var middleNode = function(head) {
+  let fast = head;
+  let slow = head;
+
+  // Combined condition for odd- and even-numbered lists:
+  while (fast !== null && fast.next !== null) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+
+  return slow;
+};
+
+
