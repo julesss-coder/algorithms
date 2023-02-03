@@ -6,7 +6,7 @@ URL: https://leetcode.com/problems/linked-list-cycle-ii/?envType=study-plan&id=l
 Summary: Map visited nodes and check if tail's `next` reference points to one of them
 
 */
-
+// Previous attempts based on going to the last node and checking its reference failed because obviously I cannot find the end if there isn't one...
 
 var detectCycle = function(head) {
   // Check for empty list and list with one node and no cycle
