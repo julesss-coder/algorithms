@@ -50,23 +50,22 @@ return distinctChars.length
 */
 // VERSION 1 - better time complexity than version 2
 
+// Summary: Count the first occurrence of each character
+
 function distinctCharacterCount(string) {
   if (string === "") return 0; // if-statement: 1 instruction; I can only count 1 return statement in the function, so I count the one for the worst-case scenario (the last one)
 
   const distinctChars = {}; // 1 instruction
   let charCount = 0; // 1 instruction
-
+  
   for (let i = 0; i < string.length; i++) { // string.length times
     let character = string[i]; // 1 instruction
     // If character is not in distinctChars, add it.
     if (!distinctChars[character]) { // 1 instruction
       distinctChars[character] = character; // 1 instruction
       // It does not matter which value is assigned to distinctChars[character], as all strings will be forced to a truthy value in the above if condition. 
+      charCount++; // 1 instruction
     }
-  }
-
-  for (let char in distinctChars) { // distinctChars-size times
-    charCount++;// 1 instruction
   }
 
   return charCount;// 1 instruction
@@ -74,11 +73,10 @@ function distinctCharacterCount(string) {
 
 /* Time complexity:
 Counting the number of instructions:
-1 + 1 + 1 + n * (1 + 1 + 1) + n * 1 + 1
-= 3 + 3n + n + 1
-= 4 + 4n
-=> drop lower term (4) and coefficient (4 in 4n)
-=> time complexity is O(n)
+3 + string.length * 4 + 1
+= 4 + 4 * n (string.length)
+=> drop lower term and coefficient
+=> time complexity is O(n) (n being string.length)
 --------------------------
 
 Space Complexity:
