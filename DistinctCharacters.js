@@ -47,6 +47,7 @@ for each character in string:
 return distinctChars.length
 
 =========================
+// ** PART 1 **
 */
 // VERSION 1 - better time complexity than version 2
 
@@ -61,7 +62,7 @@ function distinctCharacterCount(string) {
   for (let i = 0; i < string.length; i++) { // string.length times
     let character = string[i]; // 1 instruction
     // If character is not in distinctChars, add it.
-    if (!distinctChars[character]) { // 1 instruction
+    if (distinctChars[character] === undefined) { // 1 instruction
       distinctChars[character] = character; // 1 instruction
       // It does not matter which value is assigned to distinctChars[character], as all strings will be forced to a truthy value in the above if condition. 
       charCount++; // 1 instruction
@@ -173,3 +174,38 @@ character = " "
 
 return 4
 */
+
+/*
+Part 2
+Given 2 strings, return the number of distinct characters that appear in both strings
+
+For example:
+sharedCharacterCount("goo", "goodbye") should return 2 (g, o)
+
+
+
+*/
+
+function sharedCharacterCount(string1, string2) {
+  let distinctCharsInBothStrings = 0;
+  const distinctChars = {};
+  
+  // Find the distinct characters in string1 first
+  for (let i = 0; i < string1.length; i++) {
+    let char = string1[i];
+    if (distinctChars[char] === undefined) {
+      distinctChars[char] = true;
+    }
+  }
+
+  // Check if each distinct character found in string1 is found in string2, as well. If so, mark each as found.
+  for (let i = 0; i < string2.length; i++) {
+    let char = string2[i];
+    if (distinctChars[char] === true && distinctChars[char] !== "found in both strings") {
+      distinctChars[char] = "found in both strings";
+      distinctCharsInBothStrings++;
+    }
+  }
+
+  return distinctCharsInBothStrings;
+}
