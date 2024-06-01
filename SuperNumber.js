@@ -9,25 +9,6 @@ For example: superNumber([5, 1, 1, 1]) should return 5.
 superNumber([4,4]) should return null.
 ===================
 
-Strategy 1
-Summary: Get sum of array. For each number, is number > (sum - number)
-
------------------------
-numbers = [5, 1, 1, 1]
-
-check for empty array, array with 1 number
-
-allNumsSum = get sum of all numbers
-currentSuperNumber = null;
-
-
-for each number in numbers:
-  if number > allNumsSum - number:
-    currentSuperNumber = number
-
-
-return number
-=======================
 List of strategies:
 1) Get sum of array. For each number, is number > (sum - number)
 2) Find largest number and its position. Sum everything except largest. Compare sum with largest.
@@ -35,11 +16,11 @@ List of strategies:
 4) Best approach, combining strategy 1 with 2 and 3 (that are based on the fact that only the largest number is a candidate for the super number): Find sum. Find largest. Check if largest > (sum - largest).
 5) Works, but worst design: Find sum. Find largest. Check if largest > (sum / 2). The thought behind it: The super number is like a shareholder that holds more than half of the shares. That is how you can find it.
 
-
+===================
 */
 
-// 1) Get sum of array. For each number, is number > (sum - number)
-
+// Strategy 1
+// Summary: Get sum of array. For each number, is number > (sum - number)
 function superNumber1(numbers) {
   if (numbers.length === 0 || numbers.length === 1) {
     return null;
@@ -62,7 +43,9 @@ function superNumber1(numbers) {
   return currentSuperNumber;
 }
 
-// Strategy 2: Find largest number and its position. Sum everything except largest. Compare sum with largest.
+/*============================================================================================================
+Strategy 2: Find largest number and its position. Sum everything except largest. Compare sum with largest.
+-------------------------------------------------------------------------------------------------------------*/
 
 function superNumber2(numbers) {
   if (numbers.length === 0 || numbers.length === 1) {
@@ -97,9 +80,9 @@ function superNumber2(numbers) {
   }
 }
 
-// =============================
+/* ============================================================================================================
 // Strategy 3: Track largestSoFar. Track sum excluding largestSoFar. Compare largestSoFar with sum.
-
+---------------------------------------------------------------------------------------------------------------*/
 function superNumber3(numbers) {
   if (numbers.length === 0 || numbers.length === 1) {
     return null;
@@ -127,8 +110,9 @@ function superNumber3(numbers) {
   }
 }
 
-// =================================
-// Strategy 4: Find sum. Find largest. Check if largest > (sum - largest).
+/* ==========================================================================================================
+Strategy 4: Find sum. Find largest. Check if largest > (sum - largest).
+-------------------------------------------------------------------------------------------------------------*/
 
 function superNumber4(numbers) {
   if (numbers.length === 0 || numbers.length === 1) {
@@ -152,8 +136,9 @@ function superNumber4(numbers) {
   }
 }
 
-// ========================
-// Strategy 5: Find sum. Find largest. Check if largest > (sum / 2). The thought behind it: The super number is like a shareholder that holds more than half of the shares. This is how you can find if there is a "majority shareholder number" in the `numbers` array.
+/* ===========================================================================================================
+Strategy 5: Find sum. Find largest. Check if largest > (sum / 2). The thought behind it: The super number is like a shareholder that holds more than half of the shares. This is how you can find if there is a "majority shareholder number" in the `numbers` array.
+--------------------------------------------------------------------------------------------------------------*/
 
 function superNumber5(numbers) {
   if (numbers.length === 0 || numbers.length === 1) {
@@ -178,29 +163,31 @@ function superNumber5(numbers) {
   }
 }
 
-/*
-===================
-
-Part 2 - WIP
+/* ============================================================================================================
+Part 2
+----------------------------------------------------------------------------------------------------------------
 Given an array of positive numbers, determine whether there is one number that's at least twice as big as each of the other numbers.
 If there is, return that number. If there isn't, return null.
 
-For eaxmple:
+For example:
 twiceAsBigNumber([3, 1, 1]) should return 3
 twiceAsBigNumber([10, 4, 3, 4, 3]) should return 10
 twiceAsBigNumber([10, 9]) should return null
-*/
+----------------------------------------------------------------------------------------------------------------*/
 
-function twiceAsBigNumber(numbers) {
+/* ===========================================================================================================
+Strategy 1: Compare each number to the others. Track if current number is >= twice as big as EACH other number.
+--------------------------------------------------------------------------------------------------------------*/
+
+function twiceAsBigNumber1(numbers) {
   let twiceAsBigNumber = null;
-  isTwiceAsBig = true;
-
+  
   for (let i = 0; i < numbers.length; i++) {
-    let half = numbers[i] / 2;
-
+    let isTwiceAsBig = true;
+    let number = numbers[i];
     for (let j = 0; j < numbers.length; j++) {
       if (j !== i) {
-        if (numbers[j] >= half) {
+        if (number < numbers[j] * 2) {
           isTwiceAsBig = false;
           break;
         }
@@ -208,33 +195,33 @@ function twiceAsBigNumber(numbers) {
     }
     
     if (isTwiceAsBig === true) {
-      twiceAsBigNumber = numbers[i];
+      twiceAsBigNumber = number;
     }
   }
 
   return twiceAsBigNumber;
 }
 
-/*
+/* ===========================================================================================================
+Strategy 2: Compare largest with second largest. (If largest occurs twice, secondLargest === largest!)
+--------------------------------------------------------------------------------------------------------------*/
 
-TRACE
+function twiceAsBigNumber2(numbers) {
+  let largest = -Infinity;
+  let secondLargest = -Infinity;
 
-let twiceAsBigNumber = null;
-isTwiceAsBig = true;
+  for (let i = 0; i < numbers.length; i++) {
+    if (numbers[i] > largest) {
+      secondLargest = largest;
+      largest = numbers[i];
+    } else if (numbers[i] > secondLargest) {
+      secondLargest = numbers[i];
+    }
+  }
 
-[3, 1, 1, 1]
-i*
-j         *
-half = 1,5
-
-*/
-
-/*
-Alternative strategies:
-- Sort array (desc.). Compare 1st with (2nd * 2).
-- Compare largest with (2 * secondLargest) // if the largest number occurs twice, secondLargest === largest!
-- Find largest. Compare it with every other number (ignoring largest).
-Track
-*/
-
-// implement all approaches
+  if (largest >= (secondLargest * 2)) {
+    return largest;
+  } else {
+    return null;
+  }
+}
