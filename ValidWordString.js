@@ -56,3 +56,6 @@ function isValidWordString(string) {
 
   return true;
 }
+
+// Time complexity: O(n), where n is string.length
+// Space complexity: O(1)
