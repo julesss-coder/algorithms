@@ -76,6 +76,7 @@ function greaterThan(array1, array2) {
       }
     }
 
+    // Case: All numbers in array1 and array2 are the same, in the same order
     return false;
   } else if (array1.length > array2.length) { // 1
     return true;
@@ -88,7 +89,7 @@ function greaterThan(array1, array2) {
 
 Part 2, Strategy 1
 
-Summary:
+Summary: Track decimal point index. If equal, compare numbers before decimal point. If equal, compare numbers after decimal point.
 
 Outline:
 
@@ -134,6 +135,58 @@ decimalPointIndex2 = 2
 
 [1, 2, ".", 1, 2], [1, 2, ".", 1, 1]    => returns true
                   *                  * 
+
+EDGE CASES
+Empty arrays
+no decimal points
+only one array with decimal point
+comma instead of decimal point
 */
 
- 
+function greaterThanPart2(array1, array2) {
+  let decimalPointIndex1;
+  let decimalPointIndex2;
+
+  // Assuming the decimal point is the "." character, not the "," comma
+  for (let i = 0; i < array1.length; i++) {
+    if (array1[i] === ".") {
+      decimalPointIndex1 = i;
+      break;
+    }
+  }
+
+  for (let i = 0; i < array2.length; i++) {
+    if (array1[i] === ".") {
+      decimalPointIndex2 = i;
+      break;
+    }
+  }
+
+  if (decimalPointIndex1 > decimalPointIndex2) {
+    return true;
+  } else if (decimalPointIndex1 < decimalPointIndex2) {
+    return false;
+  } else if (decimalPointIndex1 === decimalPointIndex2) {
+    for (let i = 0; i < decimalPointIndex1; i++) {
+      if (array1[i] > array2[i]) {
+        return true;
+      } else if (array1[i] < array2[i]) {
+        return false;
+      } 
+    }
+
+    for (let i = decimalPointIndex1 + 1; i < array1.length; i++) {
+      let number1 = (array1[i] === undefined) ? 0 : array1[i];
+      let number2 = (array2[i] === undefined) ? 0 : array2[i];
+
+      if (number1 > number2) {
+        return true;
+      } else if (number1 < number2) {
+        return false;
+      }
+    }
+
+    // The numbers in array1 and array2 are exactly the same
+    return false;
+  }
+}
