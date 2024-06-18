@@ -80,3 +80,59 @@ function logFamilyTreeByBranch(familyTreeBranch) {
 
 logFamilyTreeByBranch(person);
 
+function listFamilyMembersByBranch(familyTreeBranch) {
+  let members = [];
+
+  // Base case
+  if (familyTreeBranch.father === undefined && familyTreeBranch.mother === undefined) {
+    members.push(familyTreeBranch.name);
+    return members;
+  }
+  // Recursive cases
+  if (familyTreeBranch.father) {
+    members.push(familyTreeBranch.name);
+    members = members.concat(listFamilyMembersByBranch(familyTreeBranch.father));
+  }
+
+  if (familyTreeBranch.mother) {
+    members.push(familyTreeBranch.name);
+    members = members.concat(listFamilyMembersByBranch(familyTreeBranch.mother));
+  }
+
+  return members;
+}
+
+let familyMembersByBranch = listFamilyMembersByBranch(person);
+console.log(familyMembersByBranch);
+/*
+
+TRACE
+
+1st call: members = members.concat()
+
+*/
+
+function getFamilyTreeByBranch(familyTreeBranch) {
+  let names = []; // Step 1: Define an array to hold names
+
+  // Base case
+  if (familyTreeBranch.father === undefined && familyTreeBranch.mother === undefined) {
+    names.push(familyTreeBranch.name); // Collect name
+  }
+  // Recursive case
+  else {
+    names.push(familyTreeBranch.name); // Collect name
+    if (familyTreeBranch.father) {
+      names = names.concat(getFamilyTreeByBranch(familyTreeBranch.father)); // Merge arrays
+    }
+    if (familyTreeBranch.mother) {
+      names = names.concat(getFamilyTreeByBranch(familyTreeBranch.mother)); // Merge arrays
+    }
+  }
+
+  return names; // Return the array of names
+}
+
+// Example usage
+const familyNames = getFamilyTreeByBranch(person);
+console.log(familyNames);
