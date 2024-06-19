@@ -34,34 +34,6 @@ Part 1, strategy 1
 
 Summary: Compare array lengths. If array lengths are equal, compare numbers by place value. 
 
-Outline:
-If array1.length === array2.length:
-  For each number in array1: 
-    If number > number at same index in array 2:
-      Return true
-    Else if number < number at same index in array2:
-      Return false
-
-  // If the numbers in the arrays are the same, in the same order
-  Return false
-Else if array1.length > array.length:
-  Return true
-Else if array.length < array2.length:
-  Return false // This works because there are no leading zeroes
-
-
-Trace
-[1, 2, 3], [1, 2, 3]
-       *          *   
-
-[3, 2, 1], [3, 2, 2] => return false
-       *          * 
-
-[1, 1], [1]
- 
-
-[1], [1, 1]
-
 Time complexity: 4 + array1.length.times * 2 => O(n), n = array1.length
 Space complexity: 1 for function call, 2 for input array memory addresses, 1 for i, 1 for `true` => O(1)
 */ 
@@ -91,56 +63,7 @@ Part 2, Strategy 1
 
 Summary: Track decimal point index. If equal, compare numbers before decimal point. If equal, compare numbers after decimal point.
 
-Outline:
-
-decimalPointIndex1;
-decimalPointIndex2;
-
-// Combine getting decimal index and comparing numbers before decimal index?
-For each array:
-  Get index of decimal point ("." or ",")
-
-If decimalPointIndex1 > decimalPointIndex2:
-  return true
-If decimalPointIndex1 < decimalPointIndex2:
-  return false
-// If numbers before decimal point have same length:
-Else if decimalPointIndex1 === decimalPointIndex2:
-  For each number in array1 until decimalPointIndex1 (exclusively):
-    If number > number at same position in array2:
-      Return true
-    Else if number < number at same position in array2:
-      Return false
-
-  For each number in array, starting after decimalPointIndex1:
-    number = if number is not undefined, number is 0
-    If number > number at same position in array2:
-      Return true
-    Else if number < number at same position in array2:
-      Return false
-
-  Return false
-    
-TRACE
-decimalPointIndex1 = 1
-decimalPointIndex2 = 2
-
-[1, ".", 1, 1], [1, 2, ".", 1, 1]    => returns false
-*               *
-
-[1, 2, ".", 1, 1], [1, ".", 1, 1]    => returns true
-
-[1, 2, ".", 1, 1], [1, 2, ".", 1, 1, 2] => returns false
-                  *                  *
-
-[1, 2, ".", 1, 2], [1, 2, ".", 1, 1]    => returns true
-                  *                  * 
-
-EDGE CASES
-Empty arrays
-no decimal points
-only one array with decimal point
-comma instead of decimal point
+Edge cases: I did not include checks for arrays without decimal points because the problem description says that both arrays will have a decimal points. In case of no decimal point, use array.length as the index of the decimal point, as you can just add a decimal point after a number without changing its value.
 */
 
 function greaterThanPart2(array1, array2) {
