@@ -11,6 +11,20 @@ You can assum that you'll start at mile-marker 0.
 
 stoppingPoint(5, 3) should return 3 (because you'll travel 3 miles from mile marker 0).
 
+---
+Part 2
+
+Now, imagine that you're driving back and forth on another road with a series of towns along the way. You still want to drive as far as you can, but you don't want to get stuck in between towns. If you ever reach a town and you don't have enough gas to reach the next one, you should stop there. 
+
+Given an integer distanceToTravel, and an array of townLocations (representing the mile marker at which each town is located), return the mile marker of the town where you'll stop. 
+
+You can assume that you'll start at the first town. 
+
+finalTown(15, [0, 10, 14]) should return 14. You can travel from 0 to 14, but not back to 10.
+finalTown(27, [0, 10, 14]) should return 10. You can travel from 0 to 14, then 4 miles back to 10. But not back to 0.
+
+Do no use string or array methods. 
+
 */
 
 /*
@@ -53,3 +67,50 @@ function stoppingPoint(n, distanceToTravel) {
     return remainingMiles;
   }
 }
+
+
+/*
+
+Strategy for part 2
+
+Summary
+
+Outline
+
+leftToRightDirection = true
+
+
+For each town in townLocations:
+  if leftToRightDirection === true
+    nextPath = right town - town
+
+    if distanceToTravel >= nextPath:
+      distanceToTravel -= nextPath
+        
+    else if distanceToTravel < nextPath:
+        return index of town
+    
+    if right town is at end of townLocations:
+      leftToRightDirection = false
+
+  // If we are going backwards:
+  else if leftToRightDirection === false:
+    nextPath = town - left town
+
+    if distanceToTravel >= nextPath:
+      distanceToTravel -= nextPath
+        
+    else if distanceToTravel < nextPath:
+        return index of town
+
+    if left town is at beginning of townLocations:
+      leftToRightDirection = true
+
+
+
+Trace:
+
+distanceToTravel = 15
+
+
+*/
