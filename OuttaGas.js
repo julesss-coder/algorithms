@@ -109,8 +109,17 @@ For each town in townLocations:
 
 
 Trace:
+leftToRightDirection = false
+distanceToTravel = 1
+[0, 10, 14]
+         *
+nextPath = 4
 
-distanceToTravel = 15
+NOTE: Strategy does not take into account that we have to change the direction of iteration once we reach the end/beginning of `townLocations` - find new strategy
 
 
 */
+
+function finalTown(distanceToTravel, townLocations) {
+
+}
