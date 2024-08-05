@@ -1,13 +1,15 @@
 /*
-
-Problem description (by Gordon Zhu and Lily Gentner from watchandcode.com):
+Problem by Gordon Zhu and Lily Gentner from watchandcode.com
+Strategy, Solution by julesss-coder
+------------------------------------------------------------
+Problem description 
 
 Part 1
 
 Imagine that you're driving back and forth on a road that's n miles long, until you run out of gas. The road starts at mile-marker 0 and ends at mile-marker n.
 
-Given two integers: n (representing the length of the road) and distanceToTravel(representing the number of miles you'll drive before running out of gas), determine where on the road (i.e. which mile marker) you'll stop.
-You can assum that you'll start at mile-marker 0.
+Given two integers: n (representing the length of the road) and distanceToTravel (representing the number of miles you'll drive before running out of gas), determine where on the road (i.e. which mile marker) you'll stop.
+You can assume that you'll start at mile-marker 0.
 
 stoppingPoint(5, 3) should return 3 (because you'll travel 3 miles from mile marker 0).
 
@@ -30,7 +32,7 @@ Do no use string or array methods.
 /*
 Summary: 
 
-Strategy:
+Strategy 1:
 
 if n === 0:
   return 0
@@ -67,6 +69,33 @@ function stoppingPoint(n, distanceToTravel) {
     return remainingMiles;
   }
 }
+
+/*
+===================================
+Strategy 2
+
+Eliminate round trips (back and forth) and find remaining distance. Track direction of travel until remaining distance is less than `n` (road length)
+
+// 1 round trip = 2 * n
+remainingDistance = distanceToTravel % 2 * n
+
+// After the round trips, we are back at position 0 (on the left)
+leftToRight = true
+
+if remainingDistance > n:
+  remainingDistance = n - remainingDistance
+  leftToRight = false
+
+// determine final mile marker starting from the right (n)
+if leftToRight === false:
+  return n - remainingDistance
+// determine final mile marker starting from the left (position 0)
+else if leftToRight === true:
+  return remainingDistance
+====================================
+
+
+  */
 
 
 /*
