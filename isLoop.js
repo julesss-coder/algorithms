@@ -9,6 +9,8 @@ isLoop(["N", "N", "S"]) should return false
 Summary:
 Map the four geographic directions to a two-dimensional coordinate systems. Trace steps in directions and see where you end up.
 
+Problem description by Gordon & Lily from WatchAndCode.com
+Solution by me
 */
 
 // Implementation
