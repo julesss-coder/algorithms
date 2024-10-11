@@ -151,10 +151,10 @@ def get_all_student_grades(students, all_grades):
     all_student_grades = []
     student_obj = None
 
-    for student in students:
+    for student in students: # n
         student_obj_created = False
 
-        for grade in all_grades:
+        for grade in all_grades: # n
             if grade['student'] == student:
                 if student_obj_created == False:
                     student_obj = {
@@ -172,9 +172,9 @@ def get_all_student_grades(students, all_grades):
 print(get_all_student_grades(['b', 'a'], all_grades))
 print(get_all_student_grades(['a', 'b'], all_grades))
 
-# Time complexity
+# Time complexity: O(n^2)
 
-#  Space complexity
+#  Space complexity: O(n)
 
 
 
