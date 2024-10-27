@@ -47,96 +47,30 @@
 
 # Return grades
 
-# all_grades = [
-#     {'student': 'a', 'grade': 90},
-#     {'student': 'b', 'grade': 80},
-#     {'student': 'a', 'grade': 95},
-# ]
+from typing import List, Dict, Any
 
-# def get_student_grades(student, all_grades):
-#     grades = []
+all_grades = [
+    {'student': 'a', 'grade': 90},
+    {'student': 'b', 'grade': 80},
+    {'student': 'a', 'grade': 95},
+]
 
-#     for grade_object in all_grades:
-#         if grade_object['student'] == student:
-#             grades.append(grade_object['grade']) # What is a way of doing this without a list method?
+def get_student_grades(student, all_grades) -> List[int]:
+    grades = []
 
-#     return grades
+    for grade_object in all_grades:
+        if grade_object['student'] == student:
+            grades.append(grade_object['grade']) # What is a way of doing this without a list method?
 
-# print(get_student_grades('a', all_grades))
+    return grades
+
+
+# Time complexity: O(n) where n is all_grades.length
+# Space complexity: O(n) where n is all_grades.length
 
 ################################
 
-# PART 2, STRATEGY 1 => INCORRECT. Does not take into account order of students in argument `students`.
-
-# collected_grades = []
-
-# For each grade_object in grades:
-#   student_name = grade_object['student'] 
-#   foud_student = False
-
-#   For each element in collected_grades:
-#       If element['student'] === student_name:
-#           found_student = True
-#           element['grades'].append(grade_object['grade'])
-#   
-#   If found_student == False:
-#       collected_grades.append({
-#           'student': student_name,
-#           'grades': [grade_object['grade']]
-#       }) 
-#       
-#   Return collected_grades
-
-
-# Summary: 
-# def getAllStudentGrades(students, all_grades):
-#     collected_grades = []
-
-#     for grade in all_grades:
-#         student_name = grade['student']
-#         found_student = False
-
-#         # Search for current student in results so far
-#         for element in collected_grades:
-#             # If student in results so far, add grade
-#             if element['student'] == student_name:
-#                 found_student = True
-#                 element['grades'].append(grade['grade'])
-
-#         # If stundent not in results so far, add new student entry
-#         if found_student == False:
-#             collected_grades.append({
-#                 'student': student_name,
-#                 'grades': [grade['grade']]
-#             })
-
-#     return collected_grades
-
-
-# getAllStudentGrades(['b', 'a'], all_grades)
-
-# Trace
-# all_grades = [
-#     {'student': 'a', 'grade': 90}, 
-#     {'student': 'b', 'grade': 80}, 
-#     {'student': 'a', 'grade': 95}, *
-# ]
-# collected_grades = [
-#     {
-#         'student': a,
-#         'grades': [90, 95]
-#     },
-#     {
-#         'student': b,
-#         'grades': [80]
-#     }
-# ]
-# student_name = a
-# found_student = True
-# 
-# ===============================================================
-
-# PART 2, STRATEGY 2
+# PART 2, STRATEGY 1
 
 #  Summary: For each student in `students`, collect all grades in `all_grades`.
 
@@ -147,14 +81,14 @@ all_grades = [
     {'student': 'a', 'grade': 95},
 ]
 
-def get_all_student_grades(students, all_grades):
+def get_all_student_grades(students, all_grades) -> List[Dict[str, List[int]]]:
     all_student_grades = []
     student_obj = None
 
-    for student in students: # n
+    for student in students: 
         student_obj_created = False
 
-        for grade in all_grades: # n
+        for grade in all_grades: 
             if grade['student'] == student:
                 if student_obj_created == False:
                     student_obj = {
@@ -169,12 +103,70 @@ def get_all_student_grades(students, all_grades):
 
     return all_student_grades
 
-print(get_all_student_grades(['b', 'a'], all_grades))
-print(get_all_student_grades(['a', 'b'], all_grades))
-
 # Time complexity: O(n^2)
 
 #  Space complexity: O(n)
+# #################################
+
+# PART 2, STRATEGY 2
+
+# grades_map = {}
+# Create a map of students to their grades:
+# For each grade_object in all_grades:
+    # If grade_object.student is not a key in grades_map:
+        # grades_map[grade_object.student] = grade_object['grade']
+    # Else if grade_object.student is a key in grades_map:
+        # grades_map[grade_object.student].push(grade_object.grade)
+
+# all_student_grades = []
+# For each student in `students`:
+    # all_student_grades.push({
+    #   student: student,
+    #   grades: grades_map[student]
+    # })
+
+# Return all_student_grades
+
+# Time complexity: O(all_grades.length + students.length) = O(n)
+# Space complexity: O(all_grades.length + number of grades in all_grades + students.length) = O(n0)
+
+def get_all_student_grades_v2(students, all_grades) -> List[Dict[str, List[int]]]: 
+    grades_map = {}
+
+    for grade_object in all_grades:
+        if grade_object['student'] not in grades_map:
+            grades_map[grade_object['student']] = [grade_object['grade']]
+        elif grade_object['student'] in grades_map:
+            grades_map[grade_object['student']].append(grade_object['grade'])
+
+    all_student_grades = []
+    for student in students:
+        all_student_grades.append({
+            'student': student,
+            'grades': grades_map[student]
+        })
+
+    return all_student_grades
+
+
+# TRACE
+# all_grades = [
+#     {'student': 'a', 'grade': 90},
+#     {'student': 'b', 'grade': 80},
+#     {'student': 'a', 'grade': 95},
+#       *
+# ]
+# students = [b, a]
+#                *
+
+# grades_map = {
+#       'a': [90, 95],
+#       'b': [80],
+# }
+# 
+# all_student_grades = [{'student': 'b', grades: [80]}, {student: 'a', 'grades': [90, 95]} ]
+# 
+
 
 
 
