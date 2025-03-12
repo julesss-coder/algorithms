@@ -104,9 +104,9 @@ function finalTown(distanceToTravel, townLocations) {
 
   if (fullTrips % 2 === 0) {
     for (let i = 0; i < townLocations.length; i++) [
-      if (remainingMilesAfterFullTrip >= townLocations[i]) {
+      // if (remainingMilesAfterFullTrip >= townLocations[i]) {
         
-      }
+      // }
     ]
   }
 
@@ -203,7 +203,7 @@ distanceToTravel = 1
          *
 nextPath = 4
 
-NOTE: Strategy does not take into account that we have to change the direction of iteration once we reach the end/beginning of `townLocations` - find new strategy`
+NOTE: Strategy does not take into account that we have to change the direction of iteration once we reach the end/beginning of `townLocations` - find new strategy
 
 
 */
