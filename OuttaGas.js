@@ -203,7 +203,7 @@ distanceToTravel = 1
          *
 nextPath = 4
 
-NOTE: Strategy does not take into account that we have to change the direction of iteration once we reach the end/beginning of `townLocations` - find new strategy
+NOTE: Strategy does not take into account that we have to change the direction of iteration once we reach the end/beginning of `townLocations` - find new strategy`
 
 
 */

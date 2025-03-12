@@ -54,5 +54,13 @@ Erklärung der Aufgabe: D.h. ein Programm, bei dem die Erzeugung der Ziffernprod
 
 a[n-1] a[i] a[0] * b[j] =    | carry | Math.floor((a[i] * b[j]) / 10)   | 0
                              | digit |                                  | a[i] * b[j] % 10
+------------------------
 
+Multiply a number `a` with n digits with number `b` with n digits
+
+carry = 0
+
+For each digit in `b`, starting from the right:
+  For each digit in `a`, starting from the right:
+    product = bDigit * aDigit + carry
 */
