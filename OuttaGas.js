@@ -37,13 +37,10 @@ Strategy 1:
 if n === 0:
   return 0
   
-if distanceToTravel === 0:
-  return distanceToTravel
-
 if distanceToTravel <= n:
   return distanceToTravel
 else if n fits into distanceToTravel an odd number of times: 
-  return n - distanceToTravel % n
+  return n - (distanceToTravel % n)
 else if n fits into distanceToTravel an even number of times: 
   return distanceToTravel % n
 
@@ -53,22 +50,84 @@ Space Complexity: O(1)
 
 */
 
-function stoppingPoint(n, distanceToTravel) {
+function stoppingPoint(n, distanceToTravel) { // n = 3, dtT = 7
   if (n === 0) return n;
-  if (distanceToTravel === 0) return distanceToTravel;
-
-  let remainingMiles = distanceToTravel % n;
 
   if (distanceToTravel <= n) {
     return distanceToTravel;
-  // if n fits into distanceToTravel an odd number of times: 
-  } else if (Math.floor(distanceToTravel / n) % 2 !== 0) {
-    return n - remainingMiles;
-// if n fits into distanceToTravel an even number of times: 
-  } else if (Math.floor(distanceToTravel / n) % 2 === 0) {
+  } 
+
+  let remainingMiles = distanceToTravel % n; // 1
+  let fullTrips = Math.floor(distanceToTravel / n) // 2
+  
+  if (fullTrips % 2 === 0) {
     return remainingMiles;
+  } else if (fullTrips % 2 !== 0) {
+    return n - remainingMiles;
   }
 }
+
+
+// ================================
+// Part II, Strategy 2
+// sort townLocations desc
+// highestMileMarker = highest element in townLocations
+// if dtT <= highestMileMarker:
+//    pass
+
+// else:
+//    remianingMilesAfterFullTrips = dtT % highestMileMarker
+//    fullTrips = Math.floor(dtT / highestMileMarker)
+
+// if fullTrips is even (includes 0):
+//  for each location in townLocations:
+//    if remainingMiles >= location:
+//      return location
+// else if fullTrips is odd:
+//    currentLocation = first location
+//    for each location in townLocations:
+//      if remainingMiles >= (current location - rightLocation):
+//        remainingMiles = current location - right location
+//        currentLocation = right location
+//      else:
+//        return current location
+// =========================
+
+
+function finalTown(distanceToTravel, townLocations) {
+  // Does this sort townLocations descending?
+  townLocations.sort((a, b) => b - a);
+
+  highestMileMarker = townLocations[0];
+  remainingMilesAfterFullTrip = distanceToTravel % highestMileMarker;
+  fullTrips = Math.floor(distanceToTravel / highestMileMarker);
+
+  if (fullTrips % 2 === 0) {
+    for (let i = 0; i < townLocations.length; i++) [
+      if (remainingMilesAfterFullTrip >= townLocations[i]) {
+        
+      }
+    ]
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 ===================================
