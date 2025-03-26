@@ -70,25 +70,25 @@ function stoppingPoint(n, distanceToTravel) { // n = 3, dtT = 7
 
 // ================================
 // Part II, Strategy 2
-// sort townLocations desc
+// sort townLocations ascending
 // highestMileMarker = highest element in townLocations
-// if dtT <= highestMileMarker:
-//    pass
-
-// else:
-//    remianingMilesAfterFullTrips = dtT % highestMileMarker
-//    fullTrips = Math.floor(dtT / highestMileMarker)
+// remainingGasMilesAfterFullTrips = dtT % highestMileMarker
+// fullTrips = Math.floor(dtT / highestMileMarker)
 
 // if fullTrips is even (includes 0):
 //  for each location in townLocations:
-//    if remainingMiles >= location:
-//      return location
+//    if remainingGasMilesAfterFullTrips > (right location - current location):
+//      remainingGasMilesAfterFullTrips = remainingGasMilesAfterFullTrips - (right location - current location) 
+//      currentLocation = right location
+//    else if remainingGasMilesAfterFullTrips <= (right location - current location): 
+//      return currentLocation
+//  
 // else if fullTrips is odd:
 //    currentLocation = first location
-//    for each location in townLocations:
-//      if remainingMiles >= (current location - rightLocation):
-//        remainingMiles = current location - right location
-//        currentLocation = right location
+//    for each location in townLocations, starting from the last, except the first:
+//      if remainingGasMilesAfterFullTrips > (current location - leftLocation):
+//        remainingGasMilesAfterFullTrips = remainingGasMilesAfterFullTrips - (current location - left location)
+//        currentLocation = left location
 //      else:
 //        return current location
 // =========================
@@ -96,9 +96,9 @@ function stoppingPoint(n, distanceToTravel) { // n = 3, dtT = 7
 
 function finalTown(distanceToTravel, townLocations) {
   // Does this sort townLocations descending?
-  townLocations.sort((a, b) => b - a);
+  // townLocations.sort((a, b) => b - a);
 
-  highestMileMarker = townLocations[0];
+  highestMileMarker = townLocations[-1];
   remainingMilesAfterFullTrip = distanceToTravel % highestMileMarker;
   fullTrips = Math.floor(distanceToTravel / highestMileMarker);
 
@@ -111,6 +111,37 @@ function finalTown(distanceToTravel, townLocations) {
   }
 
 }
+
+// finalTown(27, [0, 10, 14]) 
+// Trace 
+/*
+dtT = 27 (gas for how many miles)
+townLocations = [14, 10, 0]
+                      *
+highestMileMarker = 14
+remainingGasMilesAfterFullTrips = 9
+fullTrips = 1
+
+odd:
+  currentLocation = 10
+  returns currentLocation
+
+=======
+
+// finalTown(27, [0, 10, 12]) 
+dtT = 27
+townLocations = [0, 10, 12]
+                 *
+highestMileMarker = 12
+remainingGasMilesAfterFullTrips = 27%12 = 3
+fullTrips = Math.floor(27/12) = 2
+
+even:
+
+======
+
+
+*/
 
 
 
